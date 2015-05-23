@@ -10,9 +10,15 @@ uses
 
 type
 
-  { TTimeTableForm }
+  TMyRecord = class
+    FData: TStringList;
+    FAddButton: TButtonAdd;
+  end;
 
-  { TMyStringList }
+  TCell = class
+    FRecords: array of TMyRecord;
+  end;
+
   TMyStringList = class(TStringList)
     public
       ArrButtons: array of TButtonAdd;
@@ -41,7 +47,7 @@ type
     { public declarations }
     Columns: array of string;
     Strings: array of string;
-    Cells: array of array of TMyStringList;
+    Cells: array of array of TCell;
     //MyButtons: array of array of TButtonAdd;
     Flag: boolean;
     AdditionalFields: array of string;

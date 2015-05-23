@@ -9,12 +9,11 @@ uses
   Classes, SysUtils, Graphics;
 
 type
-
   { TButtonAdd }
 
-  TButtonAdd = class
+  TButtonAdd = class(TMyButton)
     Icon: TIcon;
-    Offset: integer;
+    Offset: Integer;
     constructor Create;
   end;
 
