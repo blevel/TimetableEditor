@@ -1,0 +1,34 @@
+object MainForm: TMainForm
+  Left = 347
+  Height = 108
+  Top = 118
+  Width = 324
+  BorderStyle = bsSingle
+  Caption = 'Hotline'
+  Menu = MainMenu
+  OnCreate = FormCreate
+  LCLVersion = '1.2.6.0'
+  object MainMenu: TMainMenu
+    object FileMenu: TMenuItem
+      Caption = 'Файл'
+      object TimeTableMenu: TMenuItem
+        Caption = 'Расписание'
+        OnClick = TimeTableMenuClick
+      end
+      object ExitMenu: TMenuItem
+        Caption = 'Выход'
+        OnClick = ExitMenuClick
+      end
+    end
+    object DirectoryMenu: TMenuItem
+      Caption = 'Справочник'
+    end
+    object HelpMenu: TMenuItem
+      Caption = 'Помощь'
+      object AboutMenu: TMenuItem
+        Caption = 'О программе'
+        OnClick = AboutMenuClick
+      end
+    end
+  end
+end

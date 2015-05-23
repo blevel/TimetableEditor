@@ -1,0 +1,35 @@
+object AboutF: TAboutF
+  Left = 527
+  Height = 117
+  Top = 207
+  Width = 370
+  BorderStyle = bsSingle
+  Caption = 'О программе'
+  ClientHeight = 117
+  ClientWidth = 370
+  LCLVersion = '1.2.6.0'
+  object LabelName: TLabel
+    Left = 16
+    Height = 20
+    Top = 24
+    Width = 185
+    Caption = 'Автор: Махлярчук Андрей '
+    ParentColor = False
+  end
+  object LabelTeacherName: TLabel
+    Left = 16
+    Height = 20
+    Top = 48
+    Width = 322
+    Caption = 'Преподаватель: Кленин Александр Срегеевич'
+    ParentColor = False
+  end
+  object LabelGroupName: TLabel
+    Left = 16
+    Height = 20
+    Top = 72
+    Width = 113
+    Caption = 'Группа: Б8103а1'
+    ParentColor = False
+  end
+end

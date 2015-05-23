@@ -1,0 +1,43 @@
+inherited BaseParentFrame: TBaseParentFrame
+  Height = 37
+  Width = 308
+  ClientHeight = 37
+  ClientWidth = 308
+  DesignLeft = 341
+  DesignTop = 123
+  object FieldNameBox: TComboBox[0]
+    Left = 8
+    Height = 23
+    Top = 8
+    Width = 96
+    ItemHeight = 15
+    Style = csDropDownList
+    TabOrder = 0
+  end
+  object OperationBox: TComboBox[1]
+    Left = 112
+    Height = 23
+    Top = 8
+    Width = 64
+    ItemHeight = 15
+    ItemIndex = 0
+    Items.Strings = (
+      '='
+      '<'
+      '>'
+      '<>'
+      'Содержится '
+      'Нач-ся с'
+    )
+    Style = csDropDownList
+    TabOrder = 1
+    Text = '='
+  end
+  object STRValue: TEdit[2]
+    Left = 192
+    Height = 23
+    Top = 8
+    Width = 96
+    TabOrder = 2
+  end
+end

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <PathDelim Value="\"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="HotLine"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="3">
+      <Item1>
+        <PackageName Value="FCL"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="SQLDBLaz"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
+    </RequiredPackages>
+    <Units Count="16">
+      <Unit0>
+        <Filename Value="HotLine.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="HotLine"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Main"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="meta.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Meta"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="listview.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ListViewForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ListView"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="dbconnection.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DBConnectionMod"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <UnitName Value="DBConnection"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="aboutform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutF"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AboutForm"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="sqlcreating.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="SQLcreating"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="filterframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="BaseParentFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="FilterFrame"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="childfirstframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ChildFirstFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="ChildFirstFrame"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="addfilterframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AdditionalFilterFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="addfilterframe"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="myframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MyFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="MyFrame"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="cardform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CardF"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="CardForm"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="walkingonforms.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="WalkingOnForms"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="timetable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="TimeTableForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="TimeTable"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="buttons.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Buttons"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="mybut.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="MyBut"/>
+      </Unit15>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="HotLine"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Linking>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <MsgFileName Value=""/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="7">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+      <Item4>
+        <Name Value="EVariantTypeCastError"/>
+      </Item4>
+      <Item5>
+        <Name Value="EIBDatabaseError"/>
+      </Item5>
+      <Item6>
+        <Name Value="EConvertError"/>
+      </Item6>
+      <Item7>
+        <Name Value="EStringListError"/>
+        <Enabled Value="False"/>
+      </Item7>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

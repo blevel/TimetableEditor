@@ -1,0 +1,66 @@
+object CardF: TCardF
+  Left = 384
+  Height = 284
+  Top = 339
+  Width = 326
+  BorderStyle = bsSingle
+  Caption = 'CardF'
+  ClientHeight = 284
+  ClientWidth = 326
+  OnClose = FormClose
+  LCLVersion = '1.2.6.0'
+  object TopPanel: TPanel
+    Left = 0
+    Height = 246
+    Top = 0
+    Width = 328
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabOrder = 0
+  end
+  object Execute: TButton
+    Left = 0
+    Height = 27
+    Top = 252
+    Width = 67
+    Anchors = [akLeft, akBottom]
+    Caption = 'Принять'
+    OnClick = ExecuteClick
+    TabOrder = 1
+  end
+  object Cancel: TButton
+    Left = 72
+    Height = 25
+    Top = 252
+    Width = 75
+    Caption = 'Отменить'
+    OnClick = CancelClick
+    TabOrder = 2
+  end
+  object SQLCardQuery: TSQLQuery
+    FieldDefs = <    
+      item
+        Name = 'TEACHERID'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'TEACHERINITIALS'
+        DataType = ftString
+        Precision = -1
+        Size = 400
+      end>
+    Database = DBConnectionMod.IBConnection
+    Transaction = DBConnectionMod.SQLTransaction
+    SQL.Strings = (
+      ''
+    )
+    Params = <>
+    left = 8
+  end
+  object DataCardSource: TDataSource
+    DataSet = SQLCardQuery
+    left = 8
+    top = 48
+  end
+end

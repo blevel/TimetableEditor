@@ -1,0 +1,26 @@
+object DBConnectionMod: TDBConnectionMod
+  OldCreateOrder = False
+  Height = 56
+  HorizontalOffset = 691
+  VerticalOffset = 115
+  Width = 160
+  object IBConnection: TIBConnection
+    Connected = True
+    LoginPrompt = False
+    DatabaseName = 'emp2.FDB'
+    KeepConnection = False
+    Password = 'masterkey'
+    Transaction = SQLTransaction
+    UserName = 'sysdba'
+    CharSet = 'UTF8'
+    LogEvents = []
+    left = 8
+    top = 8
+  end
+  object SQLTransaction: TSQLTransaction
+    Active = False
+    Database = IBConnection
+    left = 40
+    top = 8
+  end
+end
