@@ -10,6 +10,7 @@ uses
 function SQLCreateJoin(TableInfo: TMyTableInf): string;
 function SQlCreateSetToSel(TableInfo: TMyTableInf): string;
 function SQLCreateQuery(AFilterFrame: TChildFirstFrame; ATableName: string): string;
+function SQLCreateQueryFTT(AFilterFrame: TChildFirstFrame): string;
 function SQLCreateUpdate(Table: TMyTableInf; ADataObjects: array of TComponent;
   AUniqueFieldVal: string; SQLQuery: TSQLQuery): string;
 function SQLCreateInsert(Table: TMyTableInf; ADataObjects: array of TComponent;
@@ -68,6 +69,28 @@ var
   i: integer;
 begin
   Result := SPQuery + ATableName;
+  with AFilterFrame do
+  begin
+    Result += SQLGetOutCFrame;
+    for i := 0 to GetHighFilter do
+    begin
+      if Filter[i].BaseParentFrameOnLV.STRValue.Text = '' then
+      begin
+        Filter[i].Needed := False;
+        //Continue;
+      end
+      else
+        Result += Filter[i].SQLGetOutAddFrame;
+    end;
+  end;
+end;
+
+function SQLCreateQueryFTT(AFilterFrame: TChildFirstFrame): string;
+var
+  i: integer;
+
+begin
+  Result := '';
   with AFilterFrame do
   begin
     Result += SQLGetOutCFrame;
