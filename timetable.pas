@@ -6,23 +6,32 @@ interface
 
 uses
   Classes, SysUtils, sqldb, DB, FileUtil, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, Grids, StdCtrls, PairSplitter, CheckLst, DBConnection, Meta, MyBut;
+  ExtCtrls, Grids, StdCtrls, PairSplitter, CheckLst, DBConnection, Meta, MyBut, Windows;
 
 type
 
   TMyRecord = class
     FData: TStringList;
     FAddButton: TButtonAdd;
+    FChHeightButton: TButtonChHeight;
+    FTop: integer;
   end;
 
+  { TCell }
+
   TCell = class
+  public
+    Height: integer;
     FRecords: array of TMyRecord;
+    procedure AddRecord;
   end;
 
   TMyStringList = class(TStringList)
-    public
-      ArrButtons: array of TButtonAdd;
+  public
+    ArrButtons: array of TButtonAdd;
   end;
+
+  { TTimeTableForm }
 
   TTimeTableForm = class(TForm)
     Button1: TButton;
@@ -39,6 +48,10 @@ type
     procedure CheckListBox1ItemClick(Sender: TObject; Index: integer);
     procedure DrawGrid1DrawCell(Sender: TObject; aCol, aRow: integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure DrawGrid1MouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: integer);
+    procedure DrawGrid1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: integer);
     procedure FormCreate(Sender: TObject);
     procedure PairSplitter1ChangeBounds(Sender: TObject);
   private
@@ -65,6 +78,14 @@ implementation
 
 {$R *.lfm}
 
+{ TCell }
+
+procedure TCell.AddRecord;
+begin
+  SetLength(FRecords, length(FRecords) + 1);
+  FRecords[high(FRecords)] := TMyRecord.Create;
+end;
+
 { TTimeTableForm }
 
 procedure TTimeTableForm.Button1Click(Sender: TObject);
@@ -73,18 +94,21 @@ var
   i, j, k, l, h: integer;
   buf, SQLbuf: string;
   LocalFlag: boolean = True;
-  But: TButtonAdd;
+  //But: TButtonAdd;
 begin
+  //Нужно для совпадения номеров клеток
+  SetLength(Strings, 1);
+  SetLength(Columns, 1);
+  SetLength(Cells, 1);
+
+
+  //Заполняю строки
   SQLQuery1.Close;
   SQLQuery1.SQl.Text := 'SELECT ' +
     TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] +
     '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0] +
     ' FROM ' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1];
   SQLQuery1.Open;
-  SetLength(Strings, 1);
-  SetLength(Columns, 1);
-  SetLength(Cells, 1);
-  //SetLength(MyButtons, 1);
   while not SQLQuery1.EOF do
   begin
     SetLength(Strings, length(Strings) + 1);
@@ -93,6 +117,9 @@ begin
     SQLQuery1.Next;
   end;
   SQLQuery1.Close;
+
+
+  //Заполняю столбцы
   SQLQuery1.SQl.Text := 'SELECT ' +
     TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] +
     '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] +
@@ -106,12 +133,13 @@ begin
     SQLQuery1.Next;
   end;
   SQLQuery1.Close;
+
+
+
   for i := 1 to high(Columns) do
   begin
     SetLength(Cells, length(Cells) + 1);
     SetLength(Cells[high(Cells)], 1);
-    //SetLength(MyButtons, length(MyButtons) + 1);
-    //SetLength(MyButtons[high(MyButtons)], 1);
     for j := 1 to high(Strings) do
     begin
       SQLQuery1.Close;
@@ -120,9 +148,8 @@ begin
       for l := 0 to CheckListBox1.Count - 1 do
       begin
         SQLbuf := SQLQuery1.SQL.Text;
-        SQLbuf += ' INNER JOIN ' + TStringList(CheckListBox1.Items.Objects[l]).Strings[1] + ' ON SCHEDULES.' +
-          TStringList(CheckListBox1.Items.Objects[l]).Strings[2] + ' = ' +
-          TStringList(CheckListBox1.Items.Objects[l]).Strings[1] +
+        SQLbuf += ' INNER JOIN ' + TStringList(CheckListBox1.Items.Objects[l]).Strings[1] + ' ON SCHEDULES.' + TStringList(CheckListBox1.Items.Objects[l]).Strings[2] +
+          ' = ' + TStringList(CheckListBox1.Items.Objects[l]).Strings[1] +
           '.' + TStringList(CheckListBox1.Items.Objects[l]).Strings[2];
         SQLQuery1.SQL.Text := SQLbuf;
       end;
@@ -137,10 +164,17 @@ begin
       SQLQuery1.SQL.Text := SQLbuf;
       //ShowMessage(SQLQuery1.SQL.Text);
       SQLQuery1.Open;
-      Cells[high(Cells), high(Cells[high(Cells)])] := TMyStringList.Create;
+
+      Cells[high(Cells)][high(Cells[high(Cells)])] := TCell.Create;
 
       while not SQLQuery1.EOF do
       begin
+        Cells[high(Cells)][high(Cells[high(Cells)])].AddRecord;
+        with Cells[high(Cells)][high(Cells[high(Cells)])] do
+        begin
+          FRecords[high(Frecords)].FData := TStringList.Create;
+        end;
+
         for k := 0 to high(DataTables.FTables[8].TabFields) - 1 do
         begin
           LocalFlag := True;
@@ -154,30 +188,43 @@ begin
             end;
           end;
           if not LocalFlag then
+          begin
             Continue;
+          end;
           buf := SQLQuery1.FieldByName(
             DataTables.FTables[8].TabFields[k].FieldFNForSel).AsString;
-          Cells[high(Cells), high(Cells[high(Cells)])].Add(buf);
+          with Cells[high(Cells)][high(Cells[high(Cells)])] do
+          begin
+            FRecords[high(Frecords)].FData.Add(buf);
+            //FRecords[high(Frecords)].FAddButton := TButtonAdd.Create;
+          end;
         end;
-        Cells[high(Cells), high(Cells[high(Cells)])].Add('------');
-        But := TButtonAdd.Create;
-        But.Offset := Cells[high(Cells)][high(Cells[high(Cells)])].Count-1;
-        //But.Left := high(MyButtons)*10;
         with Cells[high(Cells)][high(Cells[high(Cells)])] do
         begin
-          SetLength(ArrButtons, length(ArrButtons) + 1);
-          ArrButtons[high(ArrButtons)] := But;
+          FRecords[high(Frecords)].FAddButton := TButtonAdd.Create;
+          FRecords[high(FRecords)].FChHeightButton := TButtonChHeight.Create;
+          //FRecords[high(FRecords)].FTop := 40 * FRecords[high(FRecords)].FData.Count;
         end;
-        //MyButtons[high(MyButtons), high(MyButtons[high(MyButtons)])] := But;
         SQLQuery1.Next;
+      end;
+    end;
+  end;
+  for i := 1 to high(Cells) do
+  begin
+    for j := 1 to high(Cells[i]) do
+    begin
+      Cells[i][j].Height := 0;
+      for k := 0 to high(Cells[i][j].FRecords) do
+      begin
+        Cells[i][j].Height += 25 * Cells[i][j].FRecords[k].FData.Count;
       end;
     end;
   end;
   SQLQuery1.Close;
   DrawGrid1.RowCount := length(Strings);
   DrawGrid1.ColCount := length(Columns);
-  DrawGrid1.DefaultRowHeight := 30;
-  DrawGrid1.DefaultColWidth := 80;
+  DrawGrid1.DefaultRowHeight := 150;
+  DrawGrid1.DefaultColWidth := 150;
   Flag := True;
 end;
 
@@ -191,49 +238,133 @@ procedure TTimeTableForm.DrawGrid1DrawCell(Sender: TObject;
   aCol, aRow: integer; aRect: TRect; aState: TGridDrawState);
 var
   i, j, CounterOffset: integer;
-  LocalFlag: Boolean = False;
+  LocalFlag: boolean = False;
 begin
   if Flag then
   begin
     if (acol = 0) and (aRow > 0) and (aRow <= high(Strings)) then
     begin
       DrawGrid1.Canvas.TextOut(ARect.Left + 1, ARect.Top + 1, Strings[aRow]);
+      //DrawGrid1.RowHeights[aRow] := 20;
+      //DrawGrid1.ColWidths[aCol] := 180;
     end;
     if (aRow = 0) and (aCol > 0) and (aCol <= high(Columns)) then
     begin
       DrawGrid1.Canvas.TextOut(Arect.Left + 1, Arect.Top + 1, Columns[aCol]);
+      //DrawGrid1.RowHeights[aRow] := 50;
+      //DrawGrid1.ColWidths[aCol] := 180;
     end;
     if (aCol > 0) and (aRow > 0)
     {and (aRow <= high(Cells)) and (aCol <= high(Cells[aRow]))} then
     begin
-      if Cells[aCol, aRow].Count = 0 then
-        exit;
-      for i := 0 to Cells[aCol, aRow].Count - 1 do
-      begin
-        begin
-          DrawGrid1.Canvas.TextOut(Arect.Left + 1, Arect.Top + 1 + i * 20,
-            Cells[aCol, aRow].Strings[i]);
-          //if (Cells[aCol, aRow].Strings[i] = '------') and (not LocalFlag) then
-          //DrawGrid1.Canvas.Draw();
-        end;
-      end;
-      CounterOffset := 0;
+      LastTopForButtons := 0;
       for i := 0 to CheckListBox1.Count - 1 do
       begin
         if CheckListBox1.Checked[i] then
         begin
-          CounterOffset += 1;
+          LastTopForButtons += 20;
         end;
       end;
-      DrawGrid1.Canvas.Draw(aRect.Right - 16, aRect.Top, Cells[aCol][aRow].ArrButtons[0].Icon);
-      for i := 0 to high(Cells[aCol][aRow].ArrButtons) do
+      LastTopForButtons += 20;
+      with DrawGrid1.Canvas do
+
       begin
-        LastTopForButtons := aRect.Top +  CounterOffset*20;
-        DrawGrid1.Canvas.Draw(aRect.Right - 16, aRect.Top +  Cells[aCol][aRow].ArrButtons[i].Offset*20, Cells[aCol][aRow].ArrButtons[i].Icon);
+        for i := 0 to high(Cells[aCol][aRow].FRecords) do
+        begin
+          with Cells[aCol][aRow].FRecords[i] do
+          begin
+            for j := 0 to FData.Count - 1 do
+            begin
+              TextOut(Arect.Left + 1, ARect.Top + 1 + j * 20 +
+                LastTopForButtons * i, FData[j]);
+            end;
+            //TextOut(Arect.Left + 1, ARect.Top + 1 + (j + 1) * 20 +
+              //LastTopForButtons * i, '-------');
+            Draw(Arect.Right - 16, ARect.Top + 1 + (j + 1) * 20 +
+              LastTopForButtons * i, FAddButton.Icon);
+            Draw(Arect.Right - 33, ARect.Top + 1 + (j + 1) * 20 +
+              LastTopForButtons * i, FChHeightButton.Icon);
+            FAddButton.RefreshRect(
+              ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i,
+              ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i + 16,
+              Arect.Right - 16,
+              Arect.Right
+              );
+            FChHeightButton.RefreshRect(
+              ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i,
+              ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i + 16,
+              Arect.Right - 33,
+              Arect.Right - 16
+              );
+          end;
+        end;
+        //DrawGrid1.DefaultColWidth := 180;
+        //DrawGrid1.DefaultRowHeight := 180;
+        //DrawGrid1.RowHeights[aRow] := 50;
+        //DrawGrid1.ColWidths[aCol] := 180;
       end;
     end;
-    DrawGrid1.DefaultColWidth := 100;
-    DrawGrid1.DefaultRowHeight := 100;
+  end;
+
+end;
+
+procedure TTimeTableForm.DrawGrid1MouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: integer);
+var
+  aCol, aRow, i, j: integer;
+  Str: string;
+begin
+  if Flag then
+  begin
+    DrawGrid1.MouseToCell(X, Y, aCol, aRow);
+    if (aCol = 0) or (aRow = 0) then
+    begin
+      DrawGrid1.Hint := '';
+      exit;
+    end;
+    Str := '';
+    if (aCol > 0) and (aRow > 0) then
+    begin
+      for i := 0 to high(Cells[aCol][aRow].FRecords) do
+      begin
+        with Cells[aCol][aRow].FRecords[i] do
+        begin
+          for j := 0 to FData.Count - 1 do
+          begin
+            Str += FData[j];
+            Str +=  #10#13;
+          end;
+          Str += #10#13;
+        end;
+      end;
+      DrawGrid1.Hint := Str;
+    end;
+  end;
+end;
+
+procedure TTimeTableForm.DrawGrid1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: integer);
+var
+  i, j, k: integer;
+  APoint: TPoint;
+begin
+  APoint.x := X;
+  APoint.y := Y;
+
+  for i := 1 to high(Cells) do
+  begin
+    for j := 1 to high(Cells[i]) do
+    begin
+      for k := 0 to high(Cells[i][j].FRecords) do
+      begin
+        if PtInRect(Cells[i][j].FRecords[k].FChHeightButton.FRect, APoint) then
+        begin
+          //ShowMessage(IntToStr(i) +' '+IntToStr(j));
+          Cells[i][j].FRecords[k].FChHeightButton.OnClick(DrawGrid1, j ,Cells[i][j].Height);
+          //DrawGrid1.RowHeights[i] := 200;
+        end;
+      end;
+    end;
   end;
 end;
 

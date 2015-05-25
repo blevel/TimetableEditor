@@ -1,0 +1,7 @@
+*.lfm
+*.ppu
+*.bak
+*.o
+*.compiled
+lib/i386-win32/HotLine.or
+*.res

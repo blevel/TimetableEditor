@@ -36,8 +36,12 @@ object TimeTableForm: TTimeTableForm
         DefaultRowHeight = 100
         ExtendedSelect = False
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSizing, goColSizing, goThumbTracking, goSmoothScroll]
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 0
         OnDrawCell = DrawGrid1DrawCell
+        OnMouseMove = DrawGrid1MouseMove
+        OnMouseUp = DrawGrid1MouseUp
       end
     end
     object PairSplitterSide2: TPairSplitterSide
@@ -78,7 +82,6 @@ object TimeTableForm: TTimeTableForm
         Height = 128
         Top = 24
         Width = 184
-        Anchors = [akTop, akLeft, akRight, akBottom]
         ItemHeight = 0
         OnItemClick = CheckListBox1ItemClick
         TabOrder = 3
