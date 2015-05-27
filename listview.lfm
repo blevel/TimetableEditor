@@ -86,9 +86,9 @@ object ListViewForm: TListViewForm
           Height = 239
           Top = 30
           Width = 752
-          HorzScrollBar.Page = 392
+          HorzScrollBar.Page = 576
           HorzScrollBar.Tracking = True
-          VertScrollBar.Page = 38
+          VertScrollBar.Page = 63
           VertScrollBar.Tracking = True
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 5
@@ -118,6 +118,14 @@ object ListViewForm: TListViewForm
                 OnChange = FieldNameBoxChange
               end
             end
+          end
+          object Edit1: TEdit
+            Left = 496
+            Height = 23
+            Top = 40
+            Width = 80
+            TabOrder = 1
+            Text = 'Edit1'
           end
         end
         object Execute: TBitBtn

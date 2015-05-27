@@ -21,6 +21,7 @@ type
     CreateNewRBut: TButton;
     DelBut: TButton;
     ChildFirstFrameOnLV: TChildFirstFrame;
+    Edit1: TEdit;
     Execute: TBitBtn;
     DataSource: TDataSource;
     DBGrid: TDBGrid;
@@ -182,6 +183,8 @@ var
   ID, i: integer;
 begin
   try
+    //Edit1.Text := SQLQuery.SQL.Text;
+    //ShowMessage(SQLQuery.SQL.Text);
     ID := SQLQuery.Fields.FieldByName(DataTables.FTables[Tag].TabUniqueF).Value;
     if not CheckAllCards(ID) then
     begin

@@ -19,6 +19,8 @@ type
     //FChHeightButton: TButtonChHeight;
     FButtons: array of TMyButton;
     FTop: integer;
+    FID: integer;
+    FSQL: string;
     procedure AddButton(AButton: TMyButton);
   end;
 
@@ -28,7 +30,9 @@ type
   public
     FHeight: integer;
     FRecords: array of TMyRecord;
-    FChHeightButton: TButtonChHeight;
+    //FChHeightButton: TButtonChHeight;
+    FButtons: array of TMyButton;
+    FSQL: string;
     procedure AddRecord;
   end;
 
@@ -47,6 +51,7 @@ type
     ComboBox2: TComboBox;
     DataSource1: TDataSource;
     DrawGrid1: TDrawGrid;
+    Edit1: TEdit;
     PairSplitter1: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
@@ -178,6 +183,7 @@ begin
         ' , ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] +
         '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0];
       SQLQuery1.SQL.Text := SQLbuf;
+      //Edit1.Text := SQLQuery1.SQL.Text;
       //ShowMessage(SQLQuery1.SQL.Text);
       SQLQuery1.Open;
 
@@ -217,14 +223,22 @@ begin
         end;
         with Cells[high(Cells)][high(Cells[high(Cells)])] do
         begin
+          Frecords[high(Frecords)].FID := SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;
+        end;
+
+        with Cells[high(Cells)][high(Cells[high(Cells)])] do
+        begin
           FChHeightButton := TButtonChHeight.Create;
           FRecords[high(Frecords)].AddButton(TButtonAdd.Create);
+          FRecords[high(FRecords)].AddButton(TButtonChange.Create);
           //FRecords[high(Frecords)].FAddButton := TButtonAdd.Create;
           //FRecords[high(FRecords)].FChHeightButton := TButtonChHeight.Create;
           //FRecords[high(FRecords)].FTop := 40 * FRecords[high(FRecords)].FData.Count;
         end;
+
         SQLQuery1.Next;
       end;
+      Cells[high(Cells)][high(Cells[high(Cells)])].FSQL := SQLQuery1.SQL.Text;
     end;
   end;
   for i := 1 to high(Cells) do
@@ -234,7 +248,7 @@ begin
       Cells[i][j].FHeight := 0;
       for k := 0 to high(Cells[i][j].FRecords) do
       begin
-        Cells[i][j].FHeight += 23 * Cells[i][j].FRecords[k].FData.Count;
+        Cells[i][j].FHeight += 20 * Cells[i][j].FRecords[k].FData.Count + 20;
       end;
     end;
   end;
@@ -319,14 +333,14 @@ begin
             for k := 0 to high(FButtons) do
             begin
               Draw(
-                Arect.Right - 16, ARect.Top + 1 + (j + 1) * 20 +
+                Arect.Right - 16 - 17*k, ARect.Top + 1 + (j + 1) * 20 +
                 LastTopForButtons * i, FButtons[k].Icon
                 );
               FButtons[k].RefreshRect(
                 ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i,
                 ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i + 16,
-                Arect.Right - 33,
-                Arect.Right - 16
+                Arect.Right - 16 - 17*k,
+                Arect.Right - 17*k
                 );
             end;
           end;
@@ -398,10 +412,34 @@ begin
   begin
     Cells[aCol][aRow].FChHeightButton.OnClick(DrawGrid1, aRow,
       Cells[aCol][aRow].FHeight);
+    exit;
     //ShowMessage('dasdas');
   end;
-
-
+  with Cells[aCol][aRow] do
+  begin
+    for i := 0 to high(FRecords) do
+    begin
+      for j := 0 to high(FRecords[i].FButtons) do
+      begin
+        if PtInRect(Frecords[i].FButtons[j].FRect, APoint) then
+        begin
+          SQLQuery1.Close;
+          //ShowMessage(IntToStr(FRecords[i].FID) +' '+ IntToStr(i));
+          SQLQuery1.SQL.Text := Cells[aCol][aRow].FSQL;
+          SQLQuery1.Open;
+          while SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger <> FRecords[i].FID do
+          begin
+            SQLQuery1.Next;
+          end;
+          //SQLQuery1.DataSource.;
+          FRecords[i].FButtons[j].OnClick1(SQLQuery1, DataTables.FTables[8], FRecords[i].FID);
+          SQLQuery1.Close;
+          //ShowMessage('dada');
+          exit;
+        end;
+      end;
+    end;
+  end;
   //for i := 1 to high(Cells) - 1 do
   //begin
   //  for j := 1 to high(Cells[i]) - 1 do

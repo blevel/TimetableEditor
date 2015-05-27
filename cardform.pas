@@ -160,7 +160,7 @@ begin
   if not FlagOfCreate then
   begin
     Result.ItemIndex :=
-      Result.Items.IndexOf(ParentQuery.Fields.FieldByName(FieldName).Value);
+      Result.Items.IndexOf(ParentQuery.FieldByName(FieldName).Value);
   end;
   Result.Style := csOwnerDrawVariable;
   Result.ReadOnly := true;
