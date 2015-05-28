@@ -9,7 +9,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, Main, Meta, ListView, AboutForm, SQLcreating, FilterFrame,
   ChildFirstFrame, addfilterframe, MyFrame, CardForm, DBConnection, TimeTable,
-  MyBut;
+  MyBut, ListViewChild;
 
 {$R *.res}
 

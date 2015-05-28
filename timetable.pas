@@ -34,6 +34,7 @@ type
     FButtons: array of TMyButton;
     FSQL: string;
     procedure AddRecord;
+    procedure AddButton(AButton: TMyButton);
   end;
 
   TMyStringList = class(TStringList)
@@ -51,7 +52,6 @@ type
     ComboBox2: TComboBox;
     DataSource1: TDataSource;
     DrawGrid1: TDrawGrid;
-    Edit1: TEdit;
     PairSplitter1: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
@@ -107,6 +107,12 @@ begin
   FRecords[high(FRecords)] := TMyRecord.Create;
 end;
 
+procedure TCell.AddButton(AButton: TMyButton);
+begin
+  SetLength(FButtons, length(FButtons) + 1);
+  FButtons[high(FButtons)] := AButton;
+end;
+
 { TTimeTableForm }
 
 procedure TTimeTableForm.Button1Click(Sender: TObject);
@@ -115,7 +121,6 @@ var
   i, j, k, l, h: integer;
   buf, SQLbuf: string;
   LocalFlag: boolean = True;
-  //But: TButtonAdd;
 begin
   //Нужно для совпадения номеров клеток
   SetLength(Strings, 1);
@@ -183,8 +188,6 @@ begin
         ' , ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] +
         '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0];
       SQLQuery1.SQL.Text := SQLbuf;
-      //Edit1.Text := SQLQuery1.SQL.Text;
-      //ShowMessage(SQLQuery1.SQL.Text);
       SQLQuery1.Open;
 
       Cells[high(Cells)][high(Cells[high(Cells)])] := TCell.Create;
@@ -218,7 +221,6 @@ begin
           with Cells[high(Cells)][high(Cells[high(Cells)])] do
           begin
             FRecords[high(Frecords)].FData.Add(buf);
-            //FRecords[high(Frecords)].FAddButton := TButtonAdd.Create;
           end;
         end;
         with Cells[high(Cells)][high(Cells[high(Cells)])] do
@@ -228,16 +230,14 @@ begin
 
         with Cells[high(Cells)][high(Cells[high(Cells)])] do
         begin
-          FChHeightButton := TButtonChHeight.Create;
-          FRecords[high(Frecords)].AddButton(TButtonAdd.Create);
           FRecords[high(FRecords)].AddButton(TButtonChange.Create);
-          //FRecords[high(Frecords)].FAddButton := TButtonAdd.Create;
-          //FRecords[high(FRecords)].FChHeightButton := TButtonChHeight.Create;
-          //FRecords[high(FRecords)].FTop := 40 * FRecords[high(FRecords)].FData.Count;
         end;
 
         SQLQuery1.Next;
       end;
+      Cells[high(Cells)][high(Cells[high(Cells)])].AddButton(TButtonChHeight.Create);
+      Cells[high(Cells)][high(Cells[high(Cells)])].AddButton(TButtonAdd.Create);
+      Cells[high(Cells)][high(Cells[high(Cells)])].AddButton(TButttonShowOnLV.Create);
       Cells[high(Cells)][high(Cells[high(Cells)])].FSQL := SQLQuery1.SQL.Text;
     end;
   end;
@@ -279,14 +279,10 @@ begin
     if (acol = 0) and (aRow > 0) and (aRow <= high(Strings)) then
     begin
       DrawGrid1.Canvas.TextOut(ARect.Left + 1, ARect.Top + 1, Strings[aRow]);
-      //DrawGrid1.RowHeights[aRow] := 20;
-      //DrawGrid1.ColWidths[aCol] := 180;
     end;
     if (aRow = 0) and (aCol > 0) and (aCol <= high(Columns)) then
     begin
       DrawGrid1.Canvas.TextOut(Arect.Left + 1, Arect.Top + 1, Columns[aCol]);
-      //DrawGrid1.RowHeights[aRow] := 50;
-      //DrawGrid1.ColWidths[aCol] := 50;
     end;
     if (aCol > 0) and (aRow > 0)
     {and (aRow <= high(Cells)) and (aCol <= high(Cells[aRow]))} then
@@ -312,24 +308,6 @@ begin
               TextOut(Arect.Left + 1, ARect.Top + 1 + j * 20 +
                 LastTopForButtons * i, FData[j]);
             end;
-            //TextOut(Arect.Left + 1, ARect.Top + 1 + (j + 1) * 20 +
-            //LastTopForButtons * i, '-------');
-            //Draw(Arect.Right - 16, ARect.Top + 1 + (j + 1) * 20 +
-            //  LastTopForButtons * i, FAddButton.Icon);
-            //Draw(Arect.Right - 33, ARect.Top + 1 + (j + 1) * 20 +
-            //  LastTopForButtons * i, FChHeightButton.Icon);
-            //FAddButton.RefreshRect(
-            //  ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i,
-            //  ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i + 16,
-            //  Arect.Right - 16,
-            //  Arect.Right
-            //  );
-            //FChHeightButton.RefreshRect(
-            //  ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i,
-            //  ARect.Top + 1 + (j + 1) * 20 + LastTopForButtons * i + 16,
-            //  Arect.Right - 33,
-            //  Arect.Right - 16
-            //  );
             for k := 0 to high(FButtons) do
             begin
               Draw(
@@ -344,16 +322,15 @@ begin
                 );
             end;
           end;
-          Draw(aRect.Right - 16, aRect.Top + 1, Cells[aCol][aRow].FChHeightButton.Icon);
-          Cells[aCol][aRow].FChHeightButton.RefreshRect(aRect.Top +
-            1, aRect.Top + 1 + 16, aRect.Right - 16, aRect.Right);
+          with Cells[aCol][aRow] do
+          begin
+            for k := 0 to high(FButtons) do
+            begin
+              Draw(Arect.Right - 16 - 17*k, Arect.Top + 1, FButtons[k].Icon);
+              FButtons[k].RefreshRect(aRect.Top + 1, aRect.Top + 1 + 16, aRect.Right - 16 - 17*k, aRect.Right - 17*k);
+            end;
+          end;
         end;
-
-
-        //DrawGrid1.DefaultColWidth := 180;
-        //DrawGrid1.DefaultRowHeight := 180;
-        //DrawGrid1.RowHeights[aRow] := 50;
-        //DrawGrid1.ColWidths[aCol] := 180;
       end;
     end;
   end;
@@ -408,15 +385,17 @@ begin
   end;
   APoint.x := X;
   APoint.y := Y;
-  if PtInRect(Cells[aCol][aRow].FChHeightButton.FRect, APoint) then
-  begin
-    Cells[aCol][aRow].FChHeightButton.OnClick(DrawGrid1, aRow,
-      Cells[aCol][aRow].FHeight);
-    exit;
-    //ShowMessage('dasdas');
-  end;
   with Cells[aCol][aRow] do
   begin
+    for i := 0 to high(FButtons) do
+    begin
+      if PtInRect(FButtons[i].FRect, APoint) then
+      begin
+        //SQLQuery1.Close;
+        FButtons[i].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
+          SQLQuery1, DataTables.FTables[8], 0);
+      end;
+    end;
     for i := 0 to high(FRecords) do
     begin
       for j := 0 to high(FRecords[i].FButtons) do
@@ -424,34 +403,20 @@ begin
         if PtInRect(Frecords[i].FButtons[j].FRect, APoint) then
         begin
           SQLQuery1.Close;
-          //ShowMessage(IntToStr(FRecords[i].FID) +' '+ IntToStr(i));
           SQLQuery1.SQL.Text := Cells[aCol][aRow].FSQL;
           SQLQuery1.Open;
           while SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger <> FRecords[i].FID do
           begin
             SQLQuery1.Next;
           end;
-          //SQLQuery1.DataSource.;
-          FRecords[i].FButtons[j].OnClick1(SQLQuery1, DataTables.FTables[8], FRecords[i].FID);
+          FRecords[i].FButtons[j].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
+            SQLQuery1, DataTables.FTables[8], FRecords[i].FID);
           SQLQuery1.Close;
-          //ShowMessage('dada');
           exit;
         end;
       end;
     end;
   end;
-  //for i := 1 to high(Cells) - 1 do
-  //begin
-  //  for j := 1 to high(Cells[i]) - 1 do
-  //  begin
-  //    if PtInRect(Cells[i][j].FChHeightButton.FRect, APoint) then
-  //    begin
-  //      //ShowMessage('Нажал');
-  //      //Cells[i][j].FChHeightButton.OnClick(DrawGrid1, j ,Cells[i][j].FHeight);
-  //      //DrawGrid1.RowHeights[i] := 200;
-  //    end;
-  //  end;
-  //end;
 end;
 
 procedure TTimeTableForm.FormCreate(Sender: TObject);
@@ -479,6 +444,8 @@ begin
   end;
   CheckListBox1.CheckAll(cbChecked);
   ChildFirstFrame1.ExecuteBFrLV := TBitBtn.Create(Self);
+  ComboBox1.ItemIndex := 0;
+  ComboBox2.ItemIndex := 0;
 
 end;
 

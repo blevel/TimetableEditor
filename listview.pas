@@ -50,11 +50,12 @@ type
   private
     SaveFirstQuery: string;
     SaveLastQuery: string;
-    LastSortCol: TColumn;
     Sorted: Sorting;
   public
     Cards: array of TCardF;
-    constructor CreateDirectoryForm(MyParent: TMenuItem; TableInfo: TMyTableInf);
+    LastSortCol: TColumn;
+    constructor CreateDirectoryForm(MyParent: TObject; TableInfo: TMyTableInf);
+    //constructor Create(TheOwner: TComponent; TableInfo: TMyTableInf);
   end;
 
 var
@@ -320,15 +321,15 @@ begin
   end;
 end;
 
-constructor TListViewForm.CreateDirectoryForm(MyParent: TMenuItem;
+constructor TListViewForm.CreateDirectoryForm(MyParent: TObject;
   TableInfo: TMyTableInf);
 var
   i: integer;
 begin
-  Tag := MyParent.Tag;
-  inherited Create(MyParent);
+  Tag := TMenuItem(MyParent).Tag;
+  inherited Create(TMenuItem(MyParent));
   Caption := TableInfo.TabAppName;
-  AppropriateItem := MyParent;
+  AppropriateItem := TMenuItem(MyParent);
   ShowAllTable(TableInfo);
   with TableInfo do
   begin
@@ -349,5 +350,33 @@ begin
   LastSortCol := nil;
   ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
 end;
+
+{constructor TListViewForm.Create(TheOwner: TComponent; TableInfo: TMyTableInf);
+var
+  i: integer;
+begin
+  inherited Create(TheOwner);
+  Caption := TableInfo.TabAppName;
+  //AppropriateItem := TMenuItem(MyParent);
+  ShowAllTable(TableInfo);
+  with TableInfo do
+  begin
+    for i := 0 to high(TabFields) do
+    begin
+      with DBGrid.Columns.Add do
+      begin
+        if TabFields[i].FieldNeedFJoin then
+          FieldName := TabFields[i].FieldFNForSel
+        else
+          FieldName := TabFields[i].FieldDBName;
+        Width := TabFields[i].FieldWidth;
+        Title.Caption := TabFields[i].FieldAppName;
+        Visible := TabFields[i].FieldVisible;
+      end;
+    end;
+  end;
+  LastSortCol := nil;
+  ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
+end;}
 
 end.
