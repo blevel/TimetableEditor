@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, sqldb, DB, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Grids, StdCtrls, PairSplitter, CheckLst, DBConnection, Meta, MyBut,
-  ChildFirstFrame, Windows, Buttons;
+  ChildFirstFrame, Windows, Buttons, SQLcreating;
 
 type
 
@@ -67,6 +67,7 @@ type
       Shift: TShiftState; X, Y: integer);
     procedure FormCreate(Sender: TObject);
     procedure PairSplitter1ChangeBounds(Sender: TObject);
+    //constructor Create(TheOwner: TObject);
   private
     { private declarations }
   public
@@ -180,7 +181,8 @@ begin
         SQLQuery1.SQL.Text := SQLbuf;
       end;
       SQLbuf := SQLQuery1.SQL.Text;
-      SQLbuf += ' WHERE ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] + ' = ''' + Columns[i] + ''' AND ' +
+      SQLbuf += SQLCreateQueryFTT(ChildFirstFrame1);
+      SQLbuf += ' AND ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] + ' = ''' + Columns[i] + ''' AND ' +
         TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0] +
         ' = ''' + Strings[j] + ''' ' + ' ORDER BY ' +
         TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] +
@@ -188,7 +190,8 @@ begin
         ' , ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] +
         '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0];
       SQLQuery1.SQL.Text := SQLbuf;
-      SQLQuery1.Open;
+      ShowMessage(SQLQuery1.SQL.Text);
+      //SQLQuery1.Open;
 
       Cells[high(Cells)][high(Cells[high(Cells)])] := TCell.Create;
 
@@ -393,7 +396,7 @@ begin
       begin
         //SQLQuery1.Close;
         FButtons[i].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
-          SQLQuery1, DataTables.FTables[8], 0);
+          SQLQuery1, DataTables.FTables[8], 0, Columns[aCol], Strings[aRow], ComboBox2.ItemIndex, ComboBox1.ItemIndex);
       end;
     end;
     for i := 0 to high(FRecords) do
@@ -410,7 +413,7 @@ begin
             SQLQuery1.Next;
           end;
           FRecords[i].FButtons[j].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
-            SQLQuery1, DataTables.FTables[8], FRecords[i].FID);
+            SQLQuery1, DataTables.FTables[8], FRecords[i].FID, Columns[aCol], Strings[aRow], ComboBox2.ItemIndex, ComboBox1.ItemIndex);
           SQLQuery1.Close;
           exit;
         end;
@@ -424,6 +427,7 @@ var
   i: integer;
   Str: array of TStringList;
 begin
+  //Tag := 8;
   Flag := False;
   for i := 0 to high(DataTables.FTables[8].TabFields) - 1 do
   begin
@@ -443,7 +447,12 @@ begin
       Str[high(Str)]);
   end;
   CheckListBox1.CheckAll(cbChecked);
+  ScrollBox1.Tag := 8;
+  ChildFirstFrame1 := TChildFirstFrame.Create(ScrollBox1);
+  ChildFirstFrame1.Left := 240;
+  ChildFirstFrame1.Top := 8;
   ChildFirstFrame1.ExecuteBFrLV := TBitBtn.Create(Self);
+  //ChildFirstFrame1.Parent.Tag := 8;
   ComboBox1.ItemIndex := 0;
   ComboBox2.ItemIndex := 0;
 

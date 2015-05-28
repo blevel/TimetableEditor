@@ -1,7 +1,7 @@
 object TimeTableForm: TTimeTableForm
-  Left = 346
+  Left = 343
   Height = 618
-  Top = 121
+  Top = 117
   Width = 869
   Caption = 'TimeTableForm'
   ClientHeight = 618
@@ -57,7 +57,7 @@ object TimeTableForm: TTimeTableForm
         Height = 173
         Top = 0
         Width = 869
-        HorzScrollBar.Page = 682
+        HorzScrollBar.Page = 232
         VertScrollBar.Page = 105
         Anchors = [akTop, akLeft, akRight, akBottom]
         ClientHeight = 169
@@ -95,19 +95,6 @@ object TimeTableForm: TTimeTableForm
           Width = 112
           ItemHeight = 0
           TabOrder = 3
-        end
-        inline ChildFirstFrame1: TChildFirstFrame
-          Left = 288
-          Top = 8
-          TabOrder = 4
-          inherited BaseParentFrameOnLv: TBaseParentFrame
-            inherited OperationBox: TComboBox
-              Left = 104
-            end
-            inherited STRValue: TEdit
-              Left = 168
-            end
-          end
         end
       end
     end

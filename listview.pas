@@ -21,7 +21,6 @@ type
     CreateNewRBut: TButton;
     DelBut: TButton;
     ChildFirstFrameOnLV: TChildFirstFrame;
-    Edit1: TEdit;
     Execute: TBitBtn;
     DataSource: TDataSource;
     DBGrid: TDBGrid;
