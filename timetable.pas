@@ -84,7 +84,8 @@ type
       Shift: TShiftState; X, Y: integer);
     procedure FormCreate(Sender: TObject);
     procedure PairSplitter1ChangeBounds(Sender: TObject);
-    procedure FillArr(ASQLQuery: TSQLQuery; ACBox: TComboBox; var AArr: TArrStr; var AarrDB: TArrStr);
+    procedure FillArr(ASQLQuery: TSQLQuery; ACBox: TComboBox;
+      var AArr: TArrStr; var AarrDB: TArrStr);
     //constructor Create(TheOwner: TObject);
   private
     { private declarations }
@@ -357,28 +358,46 @@ begin
   end;
   if ComboBox1.ItemIndex = ComboBox2.ItemIndex then
   begin
-    FlagForDrag:=False;
+    FlagForDrag := False;
     exit;
   end;
   with CellForDrag do
   begin
     for i := 0 to high(FRecords) do
     begin
+      try
       Str := '';
       SQLQuery1.Close;
       Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
-      'Schedules' + '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[2] +
-      ' = ' + DBStrings[aRow - 1] +
-      ', Schedules' + '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[2] +
-      ' = ' + DBColumns[aCol - 1] +
-      ' WHERE Schedules.RECORDID = ' + IntToStr(FRecords[i].FID);
-      SQLQuery1.SQL.Text := Str;
-      SQLQuery1.ExecSQL;
-      DBConnectionMod.SQLTransaction.Commit;
+        'Schedules' + '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[2] + ' = ' + DBStrings[aRow - 1] + ', Schedules' + '.' +
+        TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[2] +
+        ' = ' + DBColumns[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
+        IntToStr(FRecords[i].FID);
+        SQLQuery1.SQL.Text := Str;
+        SQLQuery1.ExecSQL;
+        DBConnectionMod.SQLTransaction.Commit;
+      except
+        on E: EDatabaseError do
+        begin
+          //ShowMessage(E.ToString);
+          SQLQuery1.Close;
+          Str := '';
+          Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
+            'Schedules' + '.' +
+            TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[2] +
+            ' = ' + DBColumns[aRow - 1] + ', Schedules' + '.' +
+            TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[2] +
+            ' = ' + DBStrings[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
+            IntToStr(FRecords[i].FID);
+          SQLQuery1.SQL.Text := Str;
+          SQLQuery1.ExecSQL;
+          DBConnectionMod.SQLTransaction.Commit;
+        end;
+      end;
       //ShowMessage(SQLQuery1.SQL.Text);
     end;
     Button1.Click;
-    FlagForDrag := false;
+    FlagForDrag := False;
   end;
 end;
 
@@ -390,7 +409,7 @@ begin
   DrawGrid1.MouseToCell(X, Y, aCol, aRow);
   if (aCol = 0) or (aRow = 0) then
   begin
-    FlagForDrag:=False;
+    FlagForDrag := False;
     exit;
   end;
   //if ComboBox1.ItemIndex = ComboBox2.ItemIndex then
@@ -402,7 +421,7 @@ begin
   begin
     //CellForDrag := TCell.Create;
     //CellForDrag := Cells[aCol][aRow];
-    FlagForDrag := false;
+    FlagForDrag := False;
     exit;
   end;
   CellForDrag := TCell.Create;
@@ -633,7 +652,8 @@ begin
       ASQLQuery.FieldByName(TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[0]).AsString;
 
     SetLength(AarrDB, length(AarrDB) + 1);
-    AarrDB[high(AarrDB)] := ASQLQuery.FieldByName(TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[2]).AsString;
+    AarrDB[high(AarrDB)] := ASQLQuery.FieldByName(
+      TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[2]).AsString;
     ASQLQuery.Next;
   end;
   ASQLQuery.Close;
