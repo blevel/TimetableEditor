@@ -209,9 +209,8 @@ begin
   SQLbuf += ' ORDER BY ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] + ' , ' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0];
 
   SQLQuery1.SQL.Text := SQLbuf;
-  SQLQuery1.Open;
   Edit1.Text := SQLQuery1.SQL.Text;
-
+  SQLQuery1.Open;
   Setlength(Cells, length(Columns) + 1);
   for i := 1 to high(Cells) do
   begin

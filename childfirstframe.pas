@@ -165,16 +165,17 @@ begin
     if SQLOperations[Operate] = ' LIKE ' then
     begin
       Result += SQLOperations[Operate];
-      Result += BaseParentFrameOnLv.STRValue.Text + ' ) ';
-      str := BaseParentFrameOnLv.STRValue.Text;
+      //Result += BaseParentFrameOnLv.STRValue.Text + ' ) ';
+      str := BaseParentFrameOnLv.STRValue.Text ;
       if (BaseParentFrameOnLv.OperationBox.ItemIndex = 4) then
       begin
-        BaseParentFrameOnLv.STRValue.Text := '%' + str + '%';
+        str := '''%' + str + '%''';
       end;
       if (BaseParentFrameOnLv.OperationBox.ItemIndex = 5) then
       begin
-        BaseParentFrameOnLv.STRValue.Text := str + '%';
+        str := '''' + str + '%''';
       end;
+      Result += str + ')';
       exit;
     end;
     Result += SQLOperations[Operate];
