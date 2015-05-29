@@ -93,7 +93,12 @@ begin
   Result := '';
   with AFilterFrame do
   begin
-    Result += SQLGetOutCFrame;
+    if BaseParentFrameOnLv.STRValue.Text = '' then
+    begin
+      Result := ' ';
+      exit;
+    end;
+    Result += SQLGetOutCFrameFTT;
     for i := 0 to GetHighFilter do
     begin
       if Filter[i].BaseParentFrameOnLV.STRValue.Text = '' then
@@ -102,7 +107,7 @@ begin
         //Continue;
       end
       else
-        Result += Filter[i].SQLGetOutAddFrame;
+        Result += Filter[i].SQLGetOutAddFrameFTT;
     end;
   end;
 end;

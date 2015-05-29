@@ -43,7 +43,8 @@ CREATE TABLE WeekDays
 (
 	WeekDayID     INTEGER ,
 	WeekDayName   VARCHAR (100) , 
-	WeekDayNumber INTEGER  
+	WeekDayNumber INTEGER ,   
+	WekkDaySort VARCHAR (100)
 );
 CREATE TABLE Schedules
 (

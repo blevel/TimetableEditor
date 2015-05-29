@@ -10,6 +10,8 @@ uses
 
 type
 
+  { TChildFirstFrame }
+
   TChildFirstFrame = class(TBaseParentFrame)
     BaseParentFrameOnLv: TBaseParentFrame;
     AddFilter: TBitBtn;
@@ -19,6 +21,7 @@ type
     procedure DeleteLastClick(Sender: TObject);
     procedure DeleteClick(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     function SQLGetOutCFrame: string;
+    function SQLGetOutCFrameFTT: string;
   private
     FFilters: array of TAdditionalFilterFrame;
     function GetFilter(Index: integer): TAdditionalFilterFrame;
@@ -130,6 +133,54 @@ begin
     Result += SQLOperations[Operate];
     Result += ' :pChildF' + ' ) ';
   end;
+end;
+
+function TChildFirstFrame.SQLGetOutCFrameFTT: string;
+const
+  CQuery = '%s.%s ';
+var
+  Table, Field, Operate: integer;
+  str: string;
+begin
+  Result := '';
+  with BaseParentFrameOnLv do
+  begin
+    Table := Tag;
+    Field := FieldNameBox.ItemIndex;
+    Operate := OperationBox.ItemIndex;
+    with DataTables.FTables[Table] do
+    begin
+      with TabFields[Field] do
+      begin
+        if FieldNeedFJoin then
+        begin
+          Result += ' WHERE (' + Format(CQuery, [FieldTabNForJoin, FieldFNForSel]);
+        end
+        else
+        begin
+          Result += ' WHERE (' + Format(CQuery, [TabDBName, FieldDBName]);
+        end;
+      end;
+    end;
+    if SQLOperations[Operate] = ' LIKE ' then
+    begin
+      Result += SQLOperations[Operate];
+      Result += BaseParentFrameOnLv.STRValue.Text + ' ) ';
+      str := BaseParentFrameOnLv.STRValue.Text;
+      if (BaseParentFrameOnLv.OperationBox.ItemIndex = 4) then
+      begin
+        BaseParentFrameOnLv.STRValue.Text := '%' + str + '%';
+      end;
+      if (BaseParentFrameOnLv.OperationBox.ItemIndex = 5) then
+      begin
+        BaseParentFrameOnLv.STRValue.Text := str + '%';
+      end;
+      exit;
+    end;
+    Result += SQLOperations[Operate];
+    Result += ' ''' +  BaseParentFrameOnLv.STRValue.Text + '''' + ' ) ';
+  end;
+
 end;
 
 function TChildFirstFrame.GetFilter(Index: integer): TAdditionalFilterFrame;
