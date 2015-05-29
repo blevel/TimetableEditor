@@ -48,13 +48,14 @@ type
   { TTimeTableForm }
 
   TTimeTableForm = class(TForm)
-    Button1: TButton;
-    CheckListBox1: TCheckListBox;
-    CheckListBox2: TCheckListBox;
+    SortOrderBox: TComboBox;
+    ExecuteBut: TButton;
+    FieldsBox: TCheckListBox;
+    ParametersBox: TCheckListBox;
     ChildFirstFrame1: TChildFirstFrame;
-    ComboBox1: TComboBox;
-    ComboBox2: TComboBox;
-    ComboBox3: TComboBox;
+    RowsBox: TComboBox;
+    ColumnsBox: TComboBox;
+    SortBox: TComboBox;
     DataSource1: TDataSource;
     DrawGrid1: TDrawGrid;
     Label1: TLabel;
@@ -70,9 +71,9 @@ type
     PairSplitterSide2: TPairSplitterSide;
     ScrollBox1: TScrollBox;
     SQLQuery1: TSQLQuery;
-    procedure Button1Click(Sender: TObject);
-    procedure CheckListBox1ItemClick(Sender: TObject; Index: integer);
-    procedure CheckListBox2ItemClick(Sender: TObject; Index: integer);
+    procedure ExecuteButClick(Sender: TObject);
+    procedure FieldsBoxItemClick(Sender: TObject; Index: integer);
+    procedure ParametersBoxItemClick(Sender: TObject; Index: integer);
     procedure DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
     procedure DrawGrid1DragOver(Sender, Source: TObject; X, Y: integer;
       State: TDragState; var Accept: boolean);
@@ -158,7 +159,7 @@ end;
 
 { TTimeTableForm }
 
-procedure TTimeTableForm.Button1Click(Sender: TObject);
+procedure TTimeTableForm.ExecuteButClick(Sender: TObject);
 var
   i, j, k, l, h, c: integer;
   buf, SQLbuf: string;
@@ -169,29 +170,36 @@ begin
   SetLength(Strings, 1);
   SetLength(Columns, 1);
 
-  FillArr(SQLQuery1, ComboBox2, Columns, DBColumns);
-  FillArr(SQLQuery1, ComboBox1, Strings, DBStrings);
+  FillArr(SQLQuery1, ColumnsBox, Columns, DBColumns);
+  FillArr(SQLQuery1, RowsBox, Strings, DBStrings);
 
 
   SQLQuery1.SQL.Text := 'SELECT * FROM SCHEDULES';
-  for l := 0 to CheckListBox1.Count - 1 do
+  for l := 0 to FieldsBox.Count - 1 do
   begin
     SQLbuf := SQLQuery1.SQL.Text;
-    SQLbuf += ' INNER JOIN ' + TStringList(CheckListBox1.Items.Objects[l]).Strings[1] +
-      ' ON SCHEDULES.' + TStringList(CheckListBox1.Items.Objects[l]).Strings[2] +
-      ' = ' + TStringList(CheckListBox1.Items.Objects[l]).Strings[1] +
-      '.' + TStringList(CheckListBox1.Items.Objects[l]).Strings[2];
+    SQLbuf += ' INNER JOIN ' + TStringList(FieldsBox.Items.Objects[l]).Strings[1] +
+      ' ON SCHEDULES.' + TStringList(FieldsBox.Items.Objects[l]).Strings[2] +
+      ' = ' + TStringList(FieldsBox.Items.Objects[l]).Strings[1] +
+      '.' + TStringList(FieldsBox.Items.Objects[l]).Strings[2];
     SQLQuery1.SQL.Text := SQLbuf;
   end;
   SQLbuf := SQLQuery1.SQL.Text;
   SQLbuf += ' ' + SQLCreateQueryFTT(ChildFirstFrame1);
-  SQLbuf += ' ORDER BY ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1]
-  + '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[3] + ' , '
-  + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] + '.'
-  + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[3] + ' , '
-  + TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[1] + '.'
-  + TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[3];
-
+  SQLbuf += ' ORDER BY ' + TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[1]
+  + '.' + TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[3] + ' , '
+  + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[1] + '.'
+  + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[3] + ' , '
+  + TStringList(SortBox.Items.Objects[SortBox.ItemIndex]).Strings[1] + '.'
+  + TStringList(SortBox.Items.Objects[SortBox.ItemIndex]).Strings[3];
+  if SortBox.ItemIndex = 0 then
+  begin
+    SQLbuf += ' DESC ';
+  end;
+  if SortBox.ItemIndex = 1 then
+  begin
+    SQLbuf += ' ASC ';
+  end;
 
   SQLQuery1.SQL.Text := SQLbuf;
   //Edit1.Text := SQLQuery1.SQL.Text;
@@ -212,8 +220,8 @@ begin
   end;
 
 
-  STRCOl := TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0];
-  STRROW := TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0];
+  STRCOl := TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[0];
+  STRROW := TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[0];
   while not SQLQuery1.EOF do
   begin
     for i := 1 to high(Columns) do
@@ -247,11 +255,11 @@ begin
         for l := 0 to high(DataTables.FTables[8].TabFields) - 1 do
         begin
           LocalFlag := True;
-          for h := 0 to CheckListBox1.Count - 1 do
+          for h := 0 to FieldsBox.Count - 1 do
           begin
             if (DataTables.FTables[8].TabFields[l].FieldFNForSel =
-              TStringList(CheckListBox1.Items.Objects[h]).Strings[0]) and
-              (CheckListBox1.Checked[h] = False) then
+              TStringList(FieldsBox.Items.Objects[h]).Strings[0]) and
+              (FieldsBox.Checked[h] = False) then
             begin
               LocalFlag := False;
             end;
@@ -264,7 +272,7 @@ begin
             DataTables.FTables[8].TabFields[l].FieldFNForSel).AsString;
           with Cells[i][j] do
           begin
-            if CheckListBox2.Checked[0] then
+            if ParametersBox.Checked[0] then
             begin
               FRecords[high(Frecords)].FData.Add(
                 DataTables.FTables[8].TabFields[l].FieldAppName + ': ' + buf);
@@ -315,32 +323,40 @@ begin
   DrawGrid1.DefaultColWidth := 150;
   DrawGrid1.RowHeights[0] := 25;
   DrawGrid1.ColWidths[0] := 50;
+  for i := 0 to DrawGrid1.RowCount - 1 do
+  begin
+    DrawGrid1.RowHeights[i] := 150;
+  end;
+  for i := 0 to DrawGrid1.ColCount - 1 do
+  begin
+    DrawGrid1.ColWidths[i] := 150;
+  end;
   Flag := True;
   DrawGrid1.Repaint;
 end;
 
-procedure TTimeTableForm.CheckListBox1ItemClick(Sender: TObject; Index: integer);
+procedure TTimeTableForm.FieldsBoxItemClick(Sender: TObject; Index: integer);
 var
   i, Count: integer;
 begin
   Count := 0;
-  for i := 0 to CheckListBox1.Count - 1 do
+  for i := 0 to FieldsBox.Count - 1 do
   begin
-    if not CheckListBox1.Checked[i] then
+    if not FieldsBox.Checked[i] then
     begin
       Count += 1;
     end;
   end;
-  if Count = CheckListBox1.Count then
+  if Count = FieldsBox.Count then
   begin
-    CheckListBox1.Checked[Index] := True;
+    FieldsBox.Checked[Index] := True;
   end;
-  Button1.Click;
+  ExecuteBut.Click;
 end;
 
-procedure TTimeTableForm.CheckListBox2ItemClick(Sender: TObject; Index: integer);
+procedure TTimeTableForm.ParametersBoxItemClick(Sender: TObject; Index: integer);
 begin
-  Button1.Click;
+  ExecuteBut.Click;
 end;
 
 procedure TTimeTableForm.DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
@@ -361,7 +377,7 @@ begin
     FlagForDrag := False;
     exit;
   end;
-  if ComboBox1.ItemIndex = ComboBox2.ItemIndex then
+  if RowsBox.ItemIndex = ColumnsBox.ItemIndex then
   begin
     FlagForDrag := False;
     exit;
@@ -374,8 +390,8 @@ begin
       Str := '';
       SQLQuery1.Close;
       Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
-        'Schedules' + '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[2] + ' = ' + DBStrings[aRow - 1] + ', Schedules' + '.' +
-        TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[2] +
+        'Schedules' + '.' + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] + ' = ' + DBStrings[aRow - 1] + ', Schedules' + '.' +
+        TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[2] +
         ' = ' + DBColumns[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
         IntToStr(FRecords[i].FID);
         SQLQuery1.SQL.Text := Str;
@@ -389,9 +405,9 @@ begin
           Str := '';
           Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
             'Schedules' + '.' +
-            TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[2] +
+            TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] +
             ' = ' + DBColumns[aRow - 1] + ', Schedules' + '.' +
-            TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[2] +
+            TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[2] +
             ' = ' + DBStrings[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
             IntToStr(FRecords[i].FID);
           SQLQuery1.SQL.Text := Str;
@@ -401,7 +417,7 @@ begin
       end;
       //ShowMessage(SQLQuery1.SQL.Text);
     end;
-    Button1.Click;
+    ExecuteBut.Click;
     FlagForDrag := False;
   end;
 end;
@@ -417,7 +433,7 @@ begin
     FlagForDrag := False;
     exit;
   end;
-  //if ComboBox1.ItemIndex = ComboBox2.ItemIndex then
+  //if RowsBox.ItemIndex = ColumnsBox.ItemIndex then
   //begin
   //  FlagForDrag:=False;
   //  exit;
@@ -453,9 +469,9 @@ begin
     {and (aCol <= high(Cells)) and (aRow <= high(Cells[aRow]))} then
     begin
       LastTopForButtons := 0;
-      for i := 0 to CheckListBox1.Count - 1 do
+      for i := 0 to FieldsBox.Count - 1 do
       begin
-        if CheckListBox1.Checked[i] then
+        if FieldsBox.Checked[i] then
         begin
           LastTopForButtons += 20;
         end;
@@ -558,7 +574,7 @@ begin
         //SQLQuery1.Close;
         FButtons[i].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
           SQLQuery1, DataTables.FTables[8], 0, Columns[aCol],
-          Strings[aRow], ComboBox2.ItemIndex, ComboBox1.ItemIndex, ChildFirstFrame1);
+          Strings[aRow], ColumnsBox.ItemIndex, RowsBox.ItemIndex, ChildFirstFrame1);
       end;
     end;
     for i := 0 to high(FRecords) do
@@ -578,8 +594,8 @@ begin
           FRecords[i].FButtons[j].OnClick(Self, DrawGrid1, aRow,
             Cells[aCol][aRow].FHeight,
             SQLQuery1, DataTables.FTables[8], FRecords[i].FID,
-            Columns[aCol], Strings[aRow], ComboBox2.ItemIndex,
-            ComboBox1.ItemIndex, ChildFirstFrame1);
+            Columns[aCol], Strings[aRow], ColumnsBox.ItemIndex,
+            RowsBox.ItemIndex, ChildFirstFrame1);
           SQLQuery1.Close;
           exit;
         end;
@@ -612,13 +628,13 @@ begin
         Add(FieldFNForJoin);
         Add(FieldForSort);
       end;
-      ComboBox1.Items.AddObject(FieldAppName, Str[high(Str)]);
-      ComboBox2.Items.AddObject(FieldAppName, Str[high(Str)]);
-      ComboBox3.Items.AddObject(FieldAppName, Str[high(Str)]);
-      CheckListBox1.AddItem(FieldAppName, Str[high(Str)]);
+      RowsBox.Items.AddObject(FieldAppName, Str[high(Str)]);
+      ColumnsBox.Items.AddObject(FieldAppName, Str[high(Str)]);
+      SortBox.Items.AddObject(FieldAppName, Str[high(Str)]);
+      FieldsBox.AddItem(FieldAppName, Str[high(Str)]);
     end;
   end;
-  CheckListBox1.CheckAll(cbChecked);
+  FieldsBox.CheckAll(cbChecked);
   ScrollBox1.Tag := 8;
   ChildFirstFrame1 := TChildFirstFrame.Create(ScrollBox1);
   with ChildFirstFrame1 do
@@ -628,9 +644,10 @@ begin
     ExecuteBFrLV := TBitBtn.Create(Self);
   end;
   //ChildFirstFrame1.Parent.Tag := 8;
-  ComboBox1.ItemIndex := 0;
-  ComboBox2.ItemIndex := 0;
-  ComboBox3.ItemIndex := 0;
+  RowsBox.ItemIndex := 0;
+  ColumnsBox.ItemIndex := 0;
+  SortBox.ItemIndex := 0;
+  SortOrderBox.ItemIndex := 0;
 end;
 
 procedure TTimeTableForm.PairSplitter1ChangeBounds(Sender: TObject);

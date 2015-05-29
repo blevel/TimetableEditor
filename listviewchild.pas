@@ -17,6 +17,8 @@ type
     constructor CreateDirectoryForm(TheOwner: TComponent; TableInfo: TMyTableInf;
   FieldNameIndex1, FieldNameIndex2: integer; STRValue1, STRValue2: string; FilterFrame: TChildFirstFrame);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure AddDefaultFilter(ABaseP: TBaseParentFrame; Index1, Index2: integer;
+  Str: string);
     public
       //FAcol: integer;
       //FARow: integer;
@@ -57,31 +59,30 @@ begin
   end;
   LastSortCol := nil;
   ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
-  ChildFirstFrameOnLV.BaseParentFrameOnLv.FieldNameBox.ItemIndex := FieldNameIndex1;
-  ChildFirstFrameOnLV.BaseParentFrameOnLv.OperationBox.ItemIndex := 0;
-  ChildFirstFrameOnLV.BaseParentFrameOnLv.STRValue.Text := STRValue1;
-  ChildFirstFrameOnLV.AddFilter.Click;
-  ChildFirstFrameOnLV.Filter[0].BaseParentFrameOnLV.FieldNameBox.ItemIndex := FieldNameIndex2;
-  ChildFirstFrameOnLV.Filter[0].BaseParentFrameOnLV.OperationBox.ItemIndex := 0;
-  ChildFirstFrameOnLV.Filter[0].BaseParentFrameOnLV.STRValue.Text := STRValue2;
-  with FilterFrame do
+  with ChildFirstFrameOnLV do
   begin
-    if BaseParentFrameOnLv.STRValue.Text = '' then
-    begin
-      Execute.Click;
-      exit;
-    end;
+    AddDefaultFilter(BaseParentFrameOnLv, FieldNameIndex1, 0, STRValue1);
     ChildFirstFrameOnLV.AddFilter.Click;
-    ChildFirstFrameOnLV.Filter[1].BaseParentFrameOnLV.FieldNameBox.ItemIndex := BaseParentFrameOnLv.FieldNameBox.ItemIndex;
-    ChildFirstFrameOnLV.Filter[1].BaseParentFrameOnLV.OperationBox.ItemIndex := BaseParentFrameOnLv.OperationBox.ItemIndex;
-    ChildFirstFrameOnLV.Filter[1].BaseParentFrameOnLV.STRValue.Text := BaseParentFrameOnLv.STRValue.Text;
-    Count := 1;
-    for i := 0 to GetHighFilter do
+    AddDefaultFilter(Filter[0].BaseParentFrameOnLV, FieldNameIndex2, 0, STRValue2);
+    with FilterFrame do
     begin
+      if BaseParentFrameOnLv.STRValue.Text = '' then
+      begin
+        Execute.Click;
+        exit;
+      end;
       ChildFirstFrameOnLV.AddFilter.Click;
-      ChildFirstFrameOnLV.Filter[Count].BaseParentFrameOnLV.FieldNameBox.ItemIndex := Filter[i].BaseParentFrameOnLV.FieldNameBox.ItemIndex;
-      ChildFirstFrameOnLV.Filter[Count].BaseParentFrameOnLV.OperationBox.ItemIndex := Filter[i].BaseParentFrameOnLv.OperationBox.ItemIndex;
-      ChildFirstFrameOnLV.Filter[Count].BaseParentFrameOnLV.STRValue.Text := Filter[i].BaseParentFrameOnLv.STRValue.Text;
+      AddDefaultFilter(ChildFirstFrameOnLV.Filter[1].BaseParentFrameOnLV,
+        BaseParentFrameOnLv.FieldNameBox.ItemIndex, BaseParentFrameOnLv.OperationBox.ItemIndex,
+        BaseParentFrameOnLv.STRValue.Text);
+      Count := 1;
+      for i := 0 to GetHighFilter do
+      begin
+        ChildFirstFrameOnLV.AddFilter.Click;
+        AddDefaultFilter(ChildFirstFrameOnLV.Filter[Count].BaseParentFrameOnLV,
+        Filter[i].BaseParentFrameOnLv.FieldNameBox.ItemIndex, Filter[i].BaseParentFrameOnLv.OperationBox.ItemIndex,
+        Filter[i].BaseParentFrameOnLv.STRValue.Text);
+      end;
     end;
   end;
   Execute.Click;
@@ -92,6 +93,14 @@ procedure TListChildView.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
   CloseAction := caFree;
+end;
+
+procedure TListChildView.AddDefaultFilter(ABaseP: TBaseParentFrame; Index1, Index2: integer;
+  Str: string);
+begin
+  ABaseP.FieldNameBox.ItemIndex := Index1;
+  ABaseP.OperationBox.ItemIndex := Index2;
+  ABaseP.STRValue.Text := Str;
 end;
 
 end.

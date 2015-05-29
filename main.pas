@@ -67,7 +67,7 @@ procedure TMainForm.RefreshForms;
 var
   i, k: integer;
 begin
-  TimeTableForm.Button1.Click;
+  TimeTableForm.ExecuteBut.Click;
   for i := 0 to MainForm.DirectoryMenu.Count - 1 do
   begin
     if DirectoryMenu.Items[i].Checked then

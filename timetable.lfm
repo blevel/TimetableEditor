@@ -68,16 +68,16 @@ object TimeTableForm: TTimeTableForm
         ClientHeight = 168
         ClientWidth = 1009
         TabOrder = 0
-        object Button1: TButton
+        object ExecuteBut: TButton
           Left = 24
           Height = 25
           Top = 8
           Width = 75
           Caption = 'Применить'
-          OnClick = Button1Click
+          OnClick = ExecuteButClick
           TabOrder = 0
         end
-        object ComboBox1: TComboBox
+        object RowsBox: TComboBox
           Left = 88
           Height = 23
           Top = 64
@@ -85,7 +85,7 @@ object TimeTableForm: TTimeTableForm
           ItemHeight = 15
           TabOrder = 1
         end
-        object ComboBox2: TComboBox
+        object ColumnsBox: TComboBox
           Left = 88
           Height = 23
           Top = 88
@@ -93,13 +93,13 @@ object TimeTableForm: TTimeTableForm
           ItemHeight = 15
           TabOrder = 2
         end
-        object CheckListBox1: TCheckListBox
+        object FieldsBox: TCheckListBox
           Left = 704
           Height = 153
           Top = 8
           Width = 112
           ItemHeight = 0
-          OnItemClick = CheckListBox1ItemClick
+          OnItemClick = FieldsBoxItemClick
           TabOrder = 3
         end
         object Edit1: TEdit
@@ -134,7 +134,7 @@ object TimeTableForm: TTimeTableForm
           Caption = 'Выборка по '
           ParentColor = False
         end
-        object ComboBox3: TComboBox
+        object SortBox: TComboBox
           Left = 200
           Height = 23
           Top = 64
@@ -150,16 +150,16 @@ object TimeTableForm: TTimeTableForm
           Caption = 'Сортировка по'
           ParentColor = False
         end
-        object CheckListBox2: TCheckListBox
+        object ParametersBox: TCheckListBox
           Left = 824
-          Height = 80
+          Height = 26
           Top = 8
           Width = 144
           Items.Strings = (
             'Заоголовки'
           )
           ItemHeight = 17
-          OnItemClick = CheckListBox2ItemClick
+          OnItemClick = ParametersBoxItemClick
           TabOrder = 6
           Data = {
             0100000000
@@ -172,6 +172,19 @@ object TimeTableForm: TTimeTableForm
           Width = 67
           Caption = 'Фильтрация'
           ParentColor = False
+        end
+        object SortOrderBox: TComboBox
+          Left = 200
+          Height = 23
+          Top = 88
+          Width = 100
+          ItemHeight = 15
+          Items.Strings = (
+            'По убыванию'
+            'По возрастанию'
+            ''
+          )
+          TabOrder = 7
         end
       end
     end
