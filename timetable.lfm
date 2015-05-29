@@ -34,11 +34,14 @@ object TimeTableForm: TTimeTableForm
         Anchors = [akTop, akLeft, akRight, akBottom]
         DefaultColWidth = 100
         DefaultRowHeight = 100
+        DragMode = dmAutomatic
         ExtendedSelect = False
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSizing, goColSizing, goThumbTracking, goSmoothScroll]
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0
+        OnDragDrop = DrawGrid1DragDrop
+        OnDragOver = DrawGrid1DragOver
         OnDrawCell = DrawGrid1DrawCell
         OnMouseMove = DrawGrid1MouseMove
         OnMouseUp = DrawGrid1MouseUp

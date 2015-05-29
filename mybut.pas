@@ -38,6 +38,8 @@ type
   { TButtonChHeight }
 
   TButtonChHeight = class(TMyButton)
+    FlagOfDirection: boolean;
+    StandartHeight: integer;
     constructor Create; override;
     procedure OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
       aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
@@ -90,7 +92,6 @@ procedure TButtonDelete.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
   FilterFrame: TChildFirstFrame);
 var
-  IDstr: string;
   ans: TModalResult;
 begin
   SQLQ.Close;
@@ -106,7 +107,7 @@ begin
     end;
     SQLQ.ExecSQL;
     DBConnectionMod.SQLTransaction.Commit;
-    //WalkOnForms;
+    WalkOnForms;
   end;
 end;
 
@@ -169,11 +170,8 @@ procedure TButtonChange.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
   FilterFrame: TChildFirstFrame);
 var
-  flag: boolean;
   i: integer;
 begin
-  //ShowMessage('dada');
-  Flag := False;
   for i := 0 to Application.ComponentCount - 1 do
   begin
     if (Application.Components[i] is TCardF) then
@@ -182,7 +180,6 @@ begin
         (AID = TCardF(Application.Components[i]).FID) then
       begin
         TCardF(Application.Components[i]).ShowOnTop;
-        Flag := True;
         exit;
       end;
     end;
@@ -206,6 +203,7 @@ constructor TButtonChHeight.Create;
 begin
   Icon := TIcon.Create;
   Icon.LoadFromFile('ButtonsIco\downarrow.ico');
+  FlagOfDirection := true;
 end;
 
 procedure TButtonChHeight.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
@@ -213,9 +211,20 @@ procedure TButtonChHeight.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
   FilterFrame: TChildFirstFrame);
 begin
-  if DrawGrid.RowHeights[aRow] < AHeight then
+  if (DrawGrid.RowHeights[aRow] < AHeight) and (FlagOfDirection) then
   begin
+    StandartHeight := DrawGrid.RowHeights[aRow];
     DrawGrid.RowHeights[aRow] := AHeight;
+    Icon.LoadFromFile('ButtonsIco\uparrow.ico');
+    FlagOfDirection := false;
+    exit;
+  end;
+  if (not FlagOfDirection) then
+  begin
+    Icon.LoadFromFile('ButtonsIco\downarrow.ico');
+    DrawGrid.RowHeights[aRow] := StandartHeight;
+    FlagOfDirection := true;
+    exit;
   end;
   //ShowMessage('Нажал');
 end;
@@ -234,15 +243,14 @@ procedure TButtonAdd.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
   FilterFrame: TChildFirstFrame);
 var
-  Index, i: integer;
+  i: integer;
 begin
-  Index := 8;
   for i := 0 to Application.ComponentCount - 1 do
   begin
     if (Application.Components[i] is TCardF) then
     begin
       if (Table.TabDBName = TCardF(Application.Components[i]).FTable.TabDBName) and
-        (0 = TCardF(Application.Components[i]).FID) then
+        (-1 = TCardF(Application.Components[i]).FID) then
       begin
         TCardF(Application.Components[i]).ShowOnTop;
         //Flag := True;
@@ -250,7 +258,7 @@ begin
       end;
     end;
   end;
-  TCardF.CreateCardF(SQLQ, Table, 0).Show;
+  TCardF.CreateCardF(SQLQ, Table, -1, aColTitle, aRowTitle).Show;
 end;
 
 end.

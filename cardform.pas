@@ -20,10 +20,10 @@ type
     SQLCardQuery: TSQLQuery;
     procedure CancelClick(Sender: TObject);
     procedure ExecuteClick(Sender: TObject);
-    constructor CreateCardF(SQLQuery: TSQLQuery; ATable: TMyTableInf; AID: integer);
+    constructor CreateCardF(SQLQuery: TSQLQuery; ATable: TMyTableInf; AID: integer; aCol: string = ''; aRow: string = '');
     function CreateCBoxes(AParent: TWinControl; AIndex: integer;
       ASQLQuery: TSQLQuery; TableName, FieldName: string;
-      strList: TStringList): TCombobox;
+      strList: TStringList; aCol: string = ''; aRow: string = ''): TCombobox;
     function CreateLable(AParent: TWinControl; ATop: integer; ACaption: string): TLabel;
     function DOSelectQuery(ASQLQuery: TSQLQuery;
       TableName, FieldName: string): TSQLQuery;
@@ -41,6 +41,7 @@ type
     FlagOfCreate: boolean;
     FTable: TMyTableInf;
     FID: integer;
+    FlagForTT: Boolean;
   end;
 
 type
@@ -56,7 +57,7 @@ implementation
 
 { TCardF }
 
-constructor TCardF.CreateCardF(SQLQuery: TSQLQuery; ATable: TMyTableInf; AID: integer);
+constructor TCardF.CreateCardF(SQLQuery: TSQLQuery; ATable: TMyTableInf; AID: integer; aCol: string = ''; aRow: string = '');
 var
   i: integer;
   CBox: TComboBox;
@@ -64,14 +65,20 @@ var
   Strings: TStringList;
 begin
   inherited Create(Application);
+  FlagForTT := false;
   savestr := ' WHERE ';
   if (AID = 0) then
   begin
     FlagOfCreate := True;
-  end
-  else
+  end;
+  if (AID > 0) then
   begin
     FlagOfCreate := False;
+  end;
+  if (AID = -1) then
+  begin
+    FlagOfCreate := True;
+    FlagForTT := true;
   end;
   ParentQuery := SQLQuery;
   //Tag := TheOwner.Tag;
@@ -92,7 +99,7 @@ begin
         Strings := CreateStringList(SQLCardQuery, TabFields[i].FieldTabNForJoin,
           TabFields[i].FieldFNForJoin);
         CBox := CreateCBoxes(TopPanel, i, SQLCardQuery,
-          TabFields[i].FieldTabNForJoin, TabFields[i].FieldFNForSel, Strings);
+          TabFields[i].FieldTabNForJoin, TabFields[i].FieldFNForSel, Strings, aCol, aRow);
         CreateLable(TopPanel, CBox.Top, TabFields[i].FieldAppName);
         DataObjects[High(DataObjects)] := CBox;
       end
@@ -133,9 +140,10 @@ end;
 
 
 function TCardF.CreateCBoxes(AParent: TWinControl; AIndex: integer;
-  ASQLQuery: TSQLQuery; TableName, FieldName: string; strList: TStringList): TCombobox;
+  ASQLQuery: TSQLQuery; TableName, FieldName: string; strList: TStringList; aCol: string = ''; aRow: string = ''): TCombobox;
 var
   SQLQ: TSQLQuery;
+  Index: integer;
 begin
   Result := TComboBox.Create(AParent);
   with Result do
@@ -161,6 +169,17 @@ begin
   begin
     Result.ItemIndex :=
       Result.Items.IndexOf(ParentQuery.FieldByName(FieldName).Value);
+  end;
+  if FlagForTT then
+  begin
+    Index := Result.Items.IndexOf(aRow);
+    //ShowMessage(IntToStr(Index) + ' '+ aRow);
+    Result.ItemIndex := Index;
+    if Index = -1 then
+    begin
+      Index := Result.Items.IndexOf(aCol);
+      Result.ItemIndex := Index;
+    end;
   end;
   Result.Style := csOwnerDrawVariable;
   Result.ReadOnly := true;

@@ -133,6 +133,7 @@ begin
     SQLQ += '  WHERE ' + TabDBName + '.' + TabUniqueF + ' = ' + AUniqueFieldVal;
     SQLPrepare(Table, ADataObjects, SQLQuery, SQLQ);
     Result := SQLQ;
+    //ShowMessage(SQLQ);
   end;
 end;
 

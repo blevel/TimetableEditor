@@ -180,7 +180,7 @@ end;
 
 procedure TListViewForm.ChangeButClick(Sender: TObject);
 var
-  ID, i: integer;
+  ID: integer;
 begin
   try
     //Edit1.Text := SQLQuery.SQL.Text;
@@ -197,8 +197,6 @@ begin
 end;
 
 procedure TListViewForm.CreateNewRButClick(Sender: TObject);
-var
-  i: integer;
 begin
   if not CheckAllCards(0) then
   begin
@@ -208,7 +206,7 @@ end;
 
 procedure TListViewForm.DBGridDblClick(Sender: TObject);
 var
-  ID, i: integer;
+  ID: integer;
 begin
   try
     ID := SQLQuery.Fields.FieldByName(DataTables.FTables[Tag].TabUniqueF).Value;
