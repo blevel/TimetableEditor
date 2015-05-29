@@ -48,11 +48,18 @@ type
   TTimeTableForm = class(TForm)
     Button1: TButton;
     CheckListBox1: TCheckListBox;
+    CheckListBox2: TCheckListBox;
     ChildFirstFrame1: TChildFirstFrame;
     ComboBox1: TComboBox;
     ComboBox2: TComboBox;
+    ComboBox3: TComboBox;
     DataSource1: TDataSource;
     DrawGrid1: TDrawGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     Lable1: TLabel;
     Lable2: TLabel;
     Edit1: TEdit;
@@ -63,6 +70,7 @@ type
     SQLQuery1: TSQLQuery;
     procedure Button1Click(Sender: TObject);
     procedure CheckListBox1ItemClick(Sender: TObject; Index: integer);
+    procedure CheckListBox2ItemClick(Sender: TObject; Index: integer);
     procedure DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
     procedure DrawGrid1DrawCell(Sender: TObject; aCol, aRow: integer;
       aRect: TRect; aState: TGridDrawState);
@@ -206,7 +214,10 @@ begin
   end;
   SQLbuf := SQLQuery1.SQL.Text;
   SQLbuf += ' ' + SQLCreateQueryFTT(ChildFirstFrame1);
-  SQLbuf += ' ORDER BY ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] + ' , ' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0];
+  SQLbuf += ' ORDER BY ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] + ' , ' +
+  TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0] + ' , ' +
+  TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[0];
+
 
   SQLQuery1.SQL.Text := SQLbuf;
   Edit1.Text := SQLQuery1.SQL.Text;
@@ -279,9 +290,16 @@ begin
             DataTables.FTables[8].TabFields[l].FieldFNForSel).AsString;
           with Cells[i][j] do
           begin
-            FRecords[high(Frecords)].FData.Add(buf);
+            if CheckListBox2.Checked[0] then
+            begin
+              FRecords[high(Frecords)].FData.Add(DataTables.FTables[8].TabFields[l].FieldAppName + ': ' + buf);
+            end else
+            begin
+              FRecords[high(Frecords)].FData.Add(buf);
+            end;
           end;
         end;
+        Cells[i][j].FRecords[high(Cells[i][j].FRecords)].FID := SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;;
         SQLQuery1.Next;
       end;
       for c := 0 to Cells[i][j].FCount - 1 do
@@ -289,8 +307,9 @@ begin
         with Cells[i][j] do
         begin
           FRecords[c].AddButton(TButtonChange.Create);
-          Frecords[c].FID :=
-            SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;
+          FRecords[c].AddButton(TButtonDelete.Create);
+          //Frecords[c].FID :=
+          //  SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;
         end;
       end;
       Cells[i][j].AddButton(TButtonChHeight.Create);
@@ -319,12 +338,32 @@ begin
   DrawGrid1.RowHeights[0] := 25;
   DrawGrid1.ColWidths[0] := 50;
   Flag := True;
+  DrawGrid1.Repaint;
 end;
 
 procedure TTimeTableForm.CheckListBox1ItemClick(Sender: TObject; Index: integer);
 var
-  i, j: integer;
+  i, Count: integer;
 begin
+  Count := 0;
+  for i := 0 to CheckListBox1.Count - 1 do
+  begin
+    if not CheckListBox1.Checked[i] then
+    begin
+      Count += 1;
+    end;
+  end;
+  if Count = CheckListBox1.Count then
+  begin
+    CheckListBox1.Checked[Index] := true;
+  end;
+  Button1.Click;
+end;
+
+procedure TTimeTableForm.CheckListBox2ItemClick(Sender: TObject; Index: integer
+  );
+begin
+  Button1.Click;
 end;
 
 procedure TTimeTableForm.DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
@@ -459,7 +498,7 @@ begin
         //SQLQuery1.Close;
         FButtons[i].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
           SQLQuery1, DataTables.FTables[8], 0, Columns[aCol],
-          Strings[aRow], ComboBox2.ItemIndex, ComboBox1.ItemIndex);
+          Strings[aRow], ComboBox2.ItemIndex, ComboBox1.ItemIndex, ChildFirstFrame1);
       end;
     end;
     for i := 0 to high(FRecords) do
@@ -479,7 +518,7 @@ begin
           FRecords[i].FButtons[j].OnClick(Self, DrawGrid1, aRow,
             Cells[aCol][aRow].FHeight,
             SQLQuery1, DataTables.FTables[8], FRecords[i].FID,
-            Columns[aCol], Strings[aRow], ComboBox2.ItemIndex, ComboBox1.ItemIndex);
+            Columns[aCol], Strings[aRow], ComboBox2.ItemIndex, ComboBox1.ItemIndex, ChildFirstFrame1);
           SQLQuery1.Close;
           exit;
         end;
@@ -509,18 +548,21 @@ begin
       Str[high(Str)]);
     ComboBox2.Items.AddObject(DataTables.FTables[8].TabFields[i].FieldAppName,
       Str[high(Str)]);
+    ComboBox3.Items.AddObject(DataTables.FTables[8].TabFields[i].FieldAppName,
+      Str[high(Str)]);
     CheckListBox1.AddItem(DataTables.FTables[8].TabFields[i].FieldAppName,
       Str[high(Str)]);
   end;
   CheckListBox1.CheckAll(cbChecked);
   ScrollBox1.Tag := 8;
   ChildFirstFrame1 := TChildFirstFrame.Create(ScrollBox1);
-  ChildFirstFrame1.Left := 240;
-  ChildFirstFrame1.Top := 8;
+  ChildFirstFrame1.Left := 300;
+  ChildFirstFrame1.Top := 56;
   ChildFirstFrame1.ExecuteBFrLV := TBitBtn.Create(Self);
   //ChildFirstFrame1.Parent.Tag := 8;
   ComboBox1.ItemIndex := 0;
   ComboBox2.ItemIndex := 0;
+  ComboBox3.ItemIndex := 0;
 
 end;
 
@@ -530,99 +572,4 @@ begin
 end;
 
 end.
-//for i := 1 to high(Columns) do//begin//  SetLength(Cells, length(Cells) + 1);//  SetLength(Cells[high(Cells)], 1);//  for j := 1 to high(Strings) do//  begin//    SQLQuery1.Close;//    SetLength(Cells[high(Cells)], length(Cells[high(Cells)]) + 1);//    SQLQuery1.SQL.Text := 'SELECT * FROM SCHEDULES';//    for l := 0 to CheckListBox1.Count - 1 do//    begin//      SQLbuf := SQLQuery1.SQL.Text;//      SQLbuf += ' INNER JOIN ' + TStringList(CheckListBox1.Items.Objects[l]).Strings[1] + ' ON SCHEDULES.' + TStringList(CheckListBox1.Items.Objects[l]).Strings[2] +//        ' = ' + TStringList(CheckListBox1.Items.Objects[l]).Strings[1] +//        '.' + TStringList(CheckListBox1.Items.Objects[l]).Strings[2];//      SQLQuery1.SQL.Text := SQLbuf;//    end;//    SQLbuf := SQLQuery1.SQL.Text;//    //SQLbuf += SQLCreateQueryFTT(ChildFirstFrame1);//    //SQLbuf += ' AND ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] + ' = ''' + Columns[i] + ''' AND ' +//    //  TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0] +//    //  ' = ''' + Strings[j] + ''' ' + ' ORDER BY ' +//    //  TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] +//    //  '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0] +//    //  ' , ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] +//    //  '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0];//    //SQLQuery1.SQL.Text := SQLbuf;//    SQLbuf += ' ORDER BY ' +//      TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] +//      '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0] +//      ' , ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] +//      '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0];//    SQLQuery1.SQL.Text := SQLbuf;//    ShowMessage(SQLQuery1.SQL.Text);//    //SQLQuery1.Open;//    Cells[high(Cells)][high(Cells[high(Cells)])] := TCell.Create;//    while not SQLQuery1.EOF do//    begin//      Cells[high(Cells)][high(Cells[high(Cells)])].AddRecord;//      with Cells[high(Cells)][high(Cells[high(Cells)])] do//      begin//        FRecords[high(Frecords)].FData := TStringList.Create;//      end;//      for k := 0 to high(DataTables.FTables[8].TabFields) - 1 do//      begin//        LocalFlag := True;//        for h := 0 to CheckListBox1.Count - 1 do//        begin//          if (DataTables.FTables[8].TabFields[k].FieldFNForSel =//            TStringList(CheckListBox1.Items.Objects[h]).Strings[0]) and//            (CheckListBox1.Checked[h] = False) then//          begin//            LocalFlag := False;//          end;//        end;//        if not LocalFlag then//        begin//          Continue;//        end;//        buf := SQLQuery1.FieldByName(//          DataTables.FTables[8].TabFields[k].FieldFNForSel).AsString;//        with Cells[high(Cells)][high(Cells[high(Cells)])] do//        begin//          FRecords[high(Frecords)].FData.Add(buf);//        end;//      end;//      with Cells[high(Cells)][high(Cells[high(Cells)])] do//      begin//        Frecords[high(Frecords)].FID :=//          SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;//      end;//      with Cells[high(Cells)][high(Cells[high(Cells)])] do//      begin//        FRecords[high(FRecords)].AddButton(TButtonChange.Create);//      end;//      SQLQuery1.Next;//    end;//    Cells[high(Cells)][high(Cells[high(Cells)])].AddButton(TButtonChHeight.Create);//    Cells[high(Cells)][high(Cells[high(Cells)])].AddButton(TButtonAdd.Create);//    Cells[high(Cells)][high(Cells[high(Cells)])].AddButton(TButttonShowOnLV.Create);//    Cells[high(Cells)][high(Cells[high(Cells)])].FSQL := SQLQuery1.SQL.Text;//  end;//end;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

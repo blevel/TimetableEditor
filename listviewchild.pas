@@ -15,7 +15,7 @@ type
 
   TListChildView = class(TListViewForm)
     constructor CreateDirectoryForm(TheOwner: TComponent; TableInfo: TMyTableInf;
-  FieldNameIndex1, FieldNameIndex2: integer; STRValue1, STRValue2: string);
+  FieldNameIndex1, FieldNameIndex2: integer; STRValue1, STRValue2: string; FilterFrame: TChildFirstFrame);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     public
       //FAcol: integer;
@@ -29,9 +29,9 @@ implementation
 { TListChildView }
 
 constructor TListChildView.CreateDirectoryForm(TheOwner: TComponent; TableInfo: TMyTableInf;
-  FieldNameIndex1, FieldNameIndex2: integer; STRValue1, STRValue2: string);
+  FieldNameIndex1, FieldNameIndex2: integer; STRValue1, STRValue2: string; FilterFrame: TChildFirstFrame);
 var
-  i: integer;
+  i, count: integer;
 begin
   Tag := TheOwner.Tag;
   FAColTitle := STRValue1;
@@ -64,6 +64,26 @@ begin
   ChildFirstFrameOnLV.Filter[0].BaseParentFrameOnLV.FieldNameBox.ItemIndex := FieldNameIndex2;
   ChildFirstFrameOnLV.Filter[0].BaseParentFrameOnLV.OperationBox.ItemIndex := 0;
   ChildFirstFrameOnLV.Filter[0].BaseParentFrameOnLV.STRValue.Text := STRValue2;
+  with FilterFrame do
+  begin
+    if BaseParentFrameOnLv.STRValue.Text = '' then
+    begin
+      Execute.Click;
+      exit;
+    end;
+    ChildFirstFrameOnLV.AddFilter.Click;
+    ChildFirstFrameOnLV.Filter[1].BaseParentFrameOnLV.FieldNameBox.ItemIndex := BaseParentFrameOnLv.FieldNameBox.ItemIndex;
+    ChildFirstFrameOnLV.Filter[1].BaseParentFrameOnLV.OperationBox.ItemIndex := BaseParentFrameOnLv.OperationBox.ItemIndex;
+    ChildFirstFrameOnLV.Filter[1].BaseParentFrameOnLV.STRValue.Text := BaseParentFrameOnLv.STRValue.Text;
+    Count := 1;
+    for i := 0 to GetHighFilter do
+    begin
+      ChildFirstFrameOnLV.AddFilter.Click;
+      ChildFirstFrameOnLV.Filter[Count].BaseParentFrameOnLV.FieldNameBox.ItemIndex := Filter[i].BaseParentFrameOnLV.FieldNameBox.ItemIndex;
+      ChildFirstFrameOnLV.Filter[Count].BaseParentFrameOnLV.OperationBox.ItemIndex := Filter[i].BaseParentFrameOnLv.OperationBox.ItemIndex;
+      ChildFirstFrameOnLV.Filter[Count].BaseParentFrameOnLV.STRValue.Text := Filter[i].BaseParentFrameOnLv.STRValue.Text;
+    end;
+  end;
   Execute.Click;
   OnClose := @FormClose;
 end;

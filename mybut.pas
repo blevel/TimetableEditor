@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, Graphics, Dialogs, Grids, Meta, sqldb, CardForm,
-  Forms, ListViewChild, Menus, ListView;
+  Forms, ListViewChild, Menus, ListView, ChildFirstFrame, Controls, DBConnection;
 
 type
 
@@ -21,7 +21,8 @@ type
     //procedure OnClick1(SQLQ: TSQLQuery; Table: TMyTableInf; AID: integer); virtual; abstract;
     procedure OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
       aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer); virtual; abstract;
+      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+      FilterFrame: TChildFirstFrame); virtual; abstract;
   end;
 
   { TButtonAdd }
@@ -30,7 +31,8 @@ type
     constructor Create; override;
     procedure OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
       aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer); override;
+      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+      FilterFrame: TChildFirstFrame); override;
   end;
 
   { TButtonChHeight }
@@ -39,7 +41,8 @@ type
     constructor Create; override;
     procedure OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
       aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer); override;
+      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+      FilterFrame: TChildFirstFrame); override;
   end;
 
   { TButtonChange }
@@ -48,7 +51,8 @@ type
     constructor Create; override;
     procedure OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
       aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer); override;
+      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+      FilterFrame: TChildFirstFrame); override;
   end;
 
   { TButttonShowOnLV }
@@ -57,10 +61,54 @@ type
     constructor Create; override;
     procedure OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
       aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer); override;
+      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+      FilterFrame: TChildFirstFrame); override;
+  end;
+
+  { TButtonDelete }
+
+  TButtonDelete = class(TMyButton)
+    constructor Create; override;
+    procedure OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
+      aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
+      AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+      FilterFrame: TChildFirstFrame); override;
   end;
 
 implementation
+
+{ TButtonDelete }
+
+constructor TButtonDelete.Create;
+begin
+  Icon := TIcon.Create;
+  Icon.LoadFromFile('ButtonsIco\minus.ico');
+end;
+
+procedure TButtonDelete.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
+  aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
+  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+  FilterFrame: TChildFirstFrame);
+var
+  IDstr: string;
+  ans: TModalResult;
+begin
+  SQLQ.Close;
+  ans := MessageDlg('Вы действительно хотите удалить выбранную запись?',
+    mtInformation, [mbYes, mbNo], 0);
+  if ans = mrYes then
+  begin
+
+    with DataTables.FTables[8] do
+    begin
+      SQLQ.SQL.Text := 'DELETE FROM ' + TabDBName + ' WHERE ' +
+        TabDBName + '.' + TabUniqueF + ' = ' + IntToStr(AID);
+    end;
+    SQLQ.ExecSQL;
+    DBConnectionMod.SQLTransaction.Commit;
+    //WalkOnForms;
+  end;
+end;
 
 { TButttonShowOnLV }
 
@@ -72,7 +120,8 @@ end;
 
 procedure TButttonShowOnLV.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer);
+  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+  FilterFrame: TChildFirstFrame);
 var
   i: integer;
 begin
@@ -104,7 +153,7 @@ begin
 
   Sender.Tag := 8;
   TListChildView.CreateDirectoryForm(Sender, Table, FNI1, FNI2,
-    aColTitle, aRowTitle).Show;
+    aColTitle, aRowTitle, FilterFrame).Show;
 end;
 
 { TButtonChange }
@@ -117,7 +166,8 @@ end;
 
 procedure TButtonChange.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer);
+  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+  FilterFrame: TChildFirstFrame);
 var
   flag: boolean;
   i: integer;
@@ -160,7 +210,8 @@ end;
 
 procedure TButtonChHeight.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer);
+  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+  FilterFrame: TChildFirstFrame);
 begin
   if DrawGrid.RowHeights[aRow] < AHeight then
   begin
@@ -180,7 +231,8 @@ end;
 
 procedure TButtonAdd.OnClick(Sender: TComponent; DrawGrid: TDrawGrid;
   aRow: integer; AHeight: integer; SQLQ: TSQLQuery; Table: TMyTableInf;
-  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer);
+  AID: integer; aColTitle, aRowTitle: string; FNI1, FNI2: integer;
+  FilterFrame: TChildFirstFrame);
 var
   Index, i: integer;
 begin
