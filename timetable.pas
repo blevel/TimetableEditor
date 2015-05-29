@@ -185,7 +185,12 @@ begin
   end;
   SQLbuf := SQLQuery1.SQL.Text;
   SQLbuf += ' ' + SQLCreateQueryFTT(ChildFirstFrame1);
-  SQLbuf += ' ORDER BY ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[0] + ' , ' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[0] + ' , ' + TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[1] + '.' + TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[0];
+  SQLbuf += ' ORDER BY ' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[1]
+  + '.' + TStringList(ComboBox2.Items.Objects[ComboBox2.ItemIndex]).Strings[3] + ' , '
+  + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[1] + '.'
+  + TStringList(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Strings[3] + ' , '
+  + TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[1] + '.'
+  + TStringList(ComboBox3.Items.Objects[ComboBox3.ItemIndex]).Strings[3];
 
 
   SQLQuery1.SQL.Text := SQLbuf;
@@ -605,6 +610,7 @@ begin
         Add(FieldFNForSel);
         Add(FieldTabNForJoin);
         Add(FieldFNForJoin);
+        Add(FieldForSort);
       end;
       ComboBox1.Items.AddObject(FieldAppName, Str[high(Str)]);
       ComboBox2.Items.AddObject(FieldAppName, Str[high(Str)]);
@@ -641,7 +647,7 @@ begin
     //'.' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[0] +
     ' FROM ' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[1] +
     ' ORDER BY ' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[1] +
-    '.' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[0];
+    '.' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[3];
   //ShowMessage(ASQLQuery.SQl.Text);
   Edit1.Text := ASQLQuery.SQl.Text;
   ASQLQuery.Open;

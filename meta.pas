@@ -21,6 +21,7 @@ type
     FieldWidth: integer;
     FieldVisible: boolean;
     FieldNeedFJoin: boolean;
+    FieldForSort: string;
   end;
 
   TMyTableInf = record
@@ -43,7 +44,7 @@ type
     procedure AddField(AFDBName: string; AFAppName: string;
       AFType: TFieldType; AFWidth: integer; AFVisible: boolean; AFieldNeedFJoin: boolean = false;
       AFieldTabNForJoin: string = ''; AFieldFNForJoin: string = '';
-      AFieldFNForSel: string = '');
+      AFieldFNForSel: string = ''; AFieldForSort: string = '');
     procedure AddSQLInTMT(ATSSQL: string);
     function GetHighTableFA: integer;
     property FTables[Index: integer]: TMyTableInf read GetCoord;
@@ -59,7 +60,7 @@ implementation
 procedure TMyTable.AddField(AFDBName: string; AFAppName: string;
   AFType: TFieldType; AFWidth: integer; AFVisible: boolean; AFieldNeedFJoin: boolean = false;
   AFieldTabNForJoin: string = ''; AFieldFNForJoin: string = '';
-  AFieldFNForSel: string = '');
+  AFieldFNForSel: string = ''; AFieldForSort: string = '');
 begin
   with Tables[high(tables)] do
   begin
@@ -75,6 +76,7 @@ begin
       FieldFNForJoin := AFieldFNForJoin;
       FieldFNForSel := AFieldFNForSel;
       FieldNeedFJoin := AFieldNeedFJoin;
+      FieldForSort := AFieldForSort;
     end;
   end;
 end;
@@ -159,25 +161,25 @@ initialization
     AddTable('Schedules', 'Расписание', True, 'RECORDID');
     AddField('GROUPID', 'Группа', ftstring, 80, True, True,
              'GROUPS', 'GROUPID',
-             'GROUPNUMBER');
+             'GROUPNUMBER', 'GROUPNUMBER');
     AddField('WEEKDAYID', 'День недели', ftString, 90, True, True,
              'WEEKDAYS', 'WEEKDAYID',
-             'WEEKDAYNAME');
+             'WEEKDAYNAME', 'WEEKDAYNUMBER');
     AddField('PAIRID', 'Номер пары', ftInteger, 100, True, True,
              'PAIRS', 'PAIRID',
-             'PAIRNUMBER');
+             'PAIRNUMBER', 'PAIRNUMBER');
     AddField('SUBJECTID', 'Предмет', ftString, 170, True, True,
              'SUBJECTS', 'SUBJECTID',
-             'SUBJECTNAME');
+             'SUBJECTNAME', 'SUBJECTNAME');
     AddField('EDUCID', 'Тип занятия', ftString, 90, True, True,
              'EDUCACTIVITIES', 'EDUCID',
-             'EDUCNAME');
+             'EDUCNAME', 'EDUCNAME');
     AddField('TEACHERID', 'Преподаватель', ftString, 210, True, True,
              'TEACHERS', 'TEACHERID',
-             'TEACHERINITIALS');
+             'TEACHERINITIALS', 'TEACHERINITIALS');
     AddField('AUDIENCEID', 'Номер аудитории', ftString, 110, True, True,
              'AUDIENCES', 'AUDIENCEID',
-             'AUDIENCENUMBER');
+             'AUDIENCENUMBER', 'AUDIENCENUMBER');
     AddField('RECORDID', 'Номер в таблице', ftInteger, 110, False);
 
     AddTable('Teachers_Subjects', 'Преподаватель-Предмет', True, 'RECORDID');
