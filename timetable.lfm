@@ -1,11 +1,11 @@
 object TimeTableForm: TTimeTableForm
-  Left = 388
+  Left = 344
   Height = 617
-  Top = 233
-  Width = 1001
+  Top = 228
+  Width = 1019
   Caption = 'TimeTableForm'
   ClientHeight = 617
-  ClientWidth = 1001
+  ClientWidth = 1019
   OnCreate = FormCreate
   LCLVersion = '1.2.6.0'
   object PairSplitter1: TPairSplitter
@@ -13,7 +13,7 @@ object TimeTableForm: TTimeTableForm
     Left = -1
     Height = 617
     Top = 0
-    Width = 1002
+    Width = 1020
     Anchors = [akTop, akLeft, akRight, akBottom]
     OnChangeBounds = PairSplitter1ChangeBounds
     Position = 440
@@ -23,8 +23,8 @@ object TimeTableForm: TTimeTableForm
       Left = 0
       Height = 440
       Top = 0
-      Width = 1002
-      ClientWidth = 1002
+      Width = 1020
+      ClientWidth = 1020
       ClientHeight = 440
       object DrawGrid1: TDrawGrid
         AnchorSideRight.Control = PairSplitterSide1
@@ -34,7 +34,7 @@ object TimeTableForm: TTimeTableForm
         Left = 0
         Height = 440
         Top = 0
-        Width = 1002
+        Width = 1020
         Anchors = [akTop, akLeft, akRight, akBottom]
         ExtendedSelect = False
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSizing, goColSizing, goThumbTracking, goSmoothScroll]
@@ -53,21 +53,21 @@ object TimeTableForm: TTimeTableForm
       Left = 0
       Height = 172
       Top = 445
-      Width = 1002
-      ClientWidth = 1002
+      Width = 1020
+      ClientWidth = 1020
       ClientHeight = 172
       object ScrollBox1: TScrollBox
         Left = 0
         Height = 172
         Top = 0
-        Width = 1001
-        HorzScrollBar.Page = 963
+        Width = 1019
+        HorzScrollBar.Page = 981
         HorzScrollBar.Tracking = True
         VertScrollBar.Page = 134
         VertScrollBar.Tracking = True
         Anchors = [akTop, akLeft, akRight, akBottom]
         ClientHeight = 151
-        ClientWidth = 980
+        ClientWidth = 998
         TabOrder = 0
         object ExecuteBut: TButton
           Left = 24
@@ -145,17 +145,19 @@ object TimeTableForm: TTimeTableForm
         end
         object ParametersBox: TCheckListBox
           Left = 824
-          Height = 26
+          Height = 64
           Top = 8
-          Width = 144
+          Width = 176
           Items.Strings = (
             'Заоголовки'
+            'Скрывать пустые столбцы'
+            'Скрывать пустые строки'
           )
           ItemHeight = 17
           OnItemClick = ParametersBoxItemClick
           TabOrder = 5
           Data = {
-            0100000000
+            03000000000000
           }
         end
         object Label5: TLabel

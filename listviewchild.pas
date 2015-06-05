@@ -36,30 +36,6 @@ var
   i, count: integer;
 begin
   TableFill(TheOwner, TableInfo, true);
-  //Tag := TheOwner.Tag;
-  //FAColTitle := STRValue1;
-  //FARowTitile := STRValue2;
-  //inherited Create(TheOwner);
-  //Caption := TableInfo.TabAppName;
-  //ShowAllTable(TableInfo);
-  //with TableInfo do
-  //begin
-  //  for i := 0 to high(TabFields) do
-  //  begin
-  //    with DBGrid.Columns.Add do
-  //    begin
-  //      if TabFields[i].FieldNeedFJoin then
-  //        FieldName := TabFields[i].FieldFNForSel
-  //      else
-  //        FieldName := TabFields[i].FieldDBName;
-  //      Width := TabFields[i].FieldWidth;
-  //      Title.Caption := TabFields[i].FieldAppName;
-  //      Visible := TabFields[i].FieldVisible;
-  //    end;
-  //  end;
-  //end;
-  //LastSortCol := nil;
-  //ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
   with ChildFirstFrameOnLV do
   begin
     AddDefaultFilter(BaseParentFrameOnLv, FieldNameIndex1, 0, STRValue1);

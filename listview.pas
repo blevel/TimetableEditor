@@ -320,57 +320,6 @@ var
   i: integer;
 begin
   TableFill(TComponent(MyParent), TableInfo, false);
-  //Tag := TMenuItem(MyParent).Tag;
-  //inherited Create(TMenuItem(MyParent));
-  //Caption := TableInfo.TabAppName;
-  //AppropriateItem := TMenuItem(MyParent);
-  //ShowAllTable(TableInfo);
-  //with TableInfo do
-  //begin
-  //  for i := 0 to high(TabFields) do
-  //  begin
-  //    with DBGrid.Columns.Add do
-  //    begin
-  //      if TabFields[i].FieldNeedFJoin then
-  //        FieldName := TabFields[i].FieldFNForSel
-  //      else
-  //        FieldName := TabFields[i].FieldDBName;
-  //      Width := TabFields[i].FieldWidth;
-  //      Title.Caption := TabFields[i].FieldAppName;
-  //      Visible := TabFields[i].FieldVisible;
-  //    end;
-  //  end;
-  //end;
-  //LastSortCol := nil;
-  //ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
 end;
-
-{constructor TListViewForm.Create(TheOwner: TComponent; TableInfo: TMyTableInf);
-var
-  i: integer;
-begin
-  inherited Create(TheOwner);
-  Caption := TableInfo.TabAppName;
-  //AppropriateItem := TMenuItem(MyParent);
-  ShowAllTable(TableInfo);
-  with TableInfo do
-  begin
-    for i := 0 to high(TabFields) do
-    begin
-      with DBGrid.Columns.Add do
-      begin
-        if TabFields[i].FieldNeedFJoin then
-          FieldName := TabFields[i].FieldFNForSel
-        else
-          FieldName := TabFields[i].FieldDBName;
-        Width := TabFields[i].FieldWidth;
-        Title.Caption := TabFields[i].FieldAppName;
-        Visible := TabFields[i].FieldVisible;
-      end;
-    end;
-  end;
-  LastSortCol := nil;
-  ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
-end;}
 
 end.

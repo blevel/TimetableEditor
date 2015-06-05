@@ -49,11 +49,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ListView"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="240"/>
-        <CursorPos X="29" Y="266"/>
+        <TopLine Value="25"/>
+        <CursorPos X="1" Y="324"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -87,7 +86,7 @@
         <UnitName Value="SQLcreating"/>
         <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="13"/>
+        <TopLine Value="32"/>
         <CursorPos X="19" Y="35"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -115,7 +114,7 @@
         <UnitName Value="ChildFirstFrame"/>
         <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="91"/>
         <CursorPos X="38" Y="23"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -130,7 +129,7 @@
         <UnitName Value="addfilterframe"/>
         <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="55"/>
         <CursorPos X="40" Y="22"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -171,7 +170,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="51" Y="4"/>
-        <UsageCount Value="193"/>
+        <UsageCount Value="196"/>
       </Unit12>
       <Unit13>
         <Filename Value="timetable.pas"/>
@@ -180,11 +179,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="TimeTable"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="190"/>
-        <CursorPos X="58" Y="563"/>
-        <UsageCount Value="148"/>
+        <TopLine Value="660"/>
+        <CursorPos X="71" Y="703"/>
+        <UsageCount Value="151"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit13>
@@ -195,7 +195,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="121"/>
+        <UsageCount Value="124"/>
       </Unit14>
       <Unit15>
         <Filename Value="mybut.pas"/>
@@ -205,7 +205,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="177"/>
         <CursorPos X="82" Y="207"/>
-        <UsageCount Value="120"/>
+        <UsageCount Value="123"/>
         <Loaded Value="True"/>
       </Unit15>
       <Unit16>
@@ -214,9 +214,9 @@
         <UnitName Value="ListViewChild"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="32"/>
-        <CursorPos X="49" Y="62"/>
-        <UsageCount Value="80"/>
+        <TopLine Value="1"/>
+        <CursorPos X="7" Y="57"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit16>
       <Unit17>
@@ -257,7 +257,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="3" Y="51"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit21>
       <Unit22>
@@ -349,7 +349,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="338"/>
         <CursorPos X="15" Y="363"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit33>
       <Unit34>
@@ -521,7 +521,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1370"/>
         <CursorPos X="14" Y="1395"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="37"/>
         <Loaded Value="True"/>
       </Unit55>
       <Unit56>
@@ -581,7 +581,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="92" Y="1666"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit63>
     </Units>
@@ -591,123 +591,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="timetable.pas"/>
-        <Caret Line="101" Column="5" TopLine="76"/>
+        <Caret Line="630" Column="39" TopLine="602"/>
       </Position1>
       <Position2>
         <Filename Value="timetable.pas"/>
-        <Caret Line="345" Column="3" TopLine="320"/>
+        <Caret Line="627" Column="51" TopLine="601"/>
       </Position2>
       <Position3>
         <Filename Value="timetable.pas"/>
-        <Caret Line="468" Column="6" TopLine="442"/>
+        <Caret Line="626" Column="30" TopLine="602"/>
       </Position3>
       <Position4>
         <Filename Value="timetable.pas"/>
-        <Caret Line="536" Column="6" TopLine="510"/>
+        <Caret Line="628" Column="18" TopLine="603"/>
       </Position4>
       <Position5>
         <Filename Value="timetable.pas"/>
-        <Caret Line="623" Column="3" TopLine="597"/>
+        <Caret Line="625" Column="43" TopLine="602"/>
       </Position5>
       <Position6>
         <Filename Value="timetable.pas"/>
-        <Caret Line="101" Column="9" TopLine="76"/>
+        <Caret Line="629" Column="40" TopLine="603"/>
       </Position6>
       <Position7>
         <Filename Value="timetable.pas"/>
-        <Caret Line="345" Column="7" TopLine="320"/>
+        <Caret Line="634" Column="3" TopLine="603"/>
       </Position7>
       <Position8>
         <Filename Value="timetable.pas"/>
-        <Caret Line="468" Column="10" TopLine="442"/>
+        <Caret Line="649" Column="22" TopLine="610"/>
       </Position8>
       <Position9>
         <Filename Value="timetable.pas"/>
-        <Caret Line="536" Column="10" TopLine="510"/>
+        <Caret Line="639" Column="6" TopLine="611"/>
       </Position9>
       <Position10>
         <Filename Value="timetable.pas"/>
-        <Caret Line="629" Column="12" TopLine="591"/>
+        <Caret Line="680" Column="90" TopLine="635"/>
       </Position10>
       <Position11>
         <Filename Value="timetable.pas"/>
-        <Caret Line="102" Column="5" TopLine="77"/>
+        <Caret Line="676" Column="100" TopLine="635"/>
       </Position11>
       <Position12>
         <Filename Value="timetable.pas"/>
-        <Caret Line="628" Column="15" TopLine="602"/>
+        <Caret Line="679" Column="51" TopLine="634"/>
       </Position12>
       <Position13>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="630" Column="39" TopLine="602"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="48" Column="25" TopLine="30"/>
       </Position13>
       <Position14>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="627" Column="51" TopLine="601"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="262" Column="75" TopLine="248"/>
       </Position14>
       <Position15>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="626" Column="30" TopLine="602"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="48" Column="85" TopLine="32"/>
       </Position15>
       <Position16>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="628" Column="18" TopLine="603"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="261" Column="6" TopLine="260"/>
       </Position16>
       <Position17>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="625" Column="43" TopLine="602"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="48" Column="67" TopLine="48"/>
       </Position17>
       <Position18>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="629" Column="40" TopLine="603"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="320" Column="39" TopLine="305"/>
       </Position18>
       <Position19>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="634" Column="3" TopLine="603"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="266" Column="29" TopLine="240"/>
       </Position19>
       <Position20>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="649" Column="22" TopLine="610"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="261" Column="25" TopLine="235"/>
       </Position20>
       <Position21>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="639" Column="6" TopLine="611"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="48" Column="44" TopLine="48"/>
       </Position21>
       <Position22>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="680" Column="90" TopLine="635"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="272" Column="39" TopLine="247"/>
       </Position22>
       <Position23>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="676" Column="100" TopLine="635"/>
+        <Filename Value="listview.pas"/>
+        <Caret Line="263" Column="14" TopLine="250"/>
       </Position23>
       <Position24>
         <Filename Value="timetable.pas"/>
-        <Caret Line="679" Column="51" TopLine="634"/>
+        <Caret Line="563" Column="58" TopLine="433"/>
       </Position24>
       <Position25>
-        <Filename Value="listview.pas"/>
-        <Caret Line="48" Column="25" TopLine="30"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="90" Column="32" TopLine="68"/>
       </Position25>
       <Position26>
-        <Filename Value="listview.pas"/>
-        <Caret Line="262" Column="75" TopLine="248"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="694" Column="21" TopLine="649"/>
       </Position26>
       <Position27>
-        <Filename Value="listview.pas"/>
-        <Caret Line="48" Column="85" TopLine="32"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="259" Column="22" TopLine="245"/>
       </Position27>
       <Position28>
-        <Filename Value="listview.pas"/>
-        <Caret Line="261" Column="6" TopLine="260"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="702" Column="28" TopLine="657"/>
       </Position28>
       <Position29>
-        <Filename Value="listview.pas"/>
-        <Caret Line="48" Column="67" TopLine="48"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="688" Column="8" TopLine="659"/>
       </Position29>
       <Position30>
-        <Filename Value="listview.pas"/>
-        <Caret Line="320" Column="39" TopLine="305"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="706" Column="23" TopLine="660"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

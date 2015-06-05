@@ -36,6 +36,7 @@ type
     FButtons: array of TMyButton;
     FSQL: string;
     FCount: integer;
+    FFilled: boolean;
     procedure AddRecord;
     procedure AddButton(AButton: TMyButton);
     destructor Destroy; override;
@@ -87,6 +88,7 @@ type
     procedure PairSplitter1ChangeBounds(Sender: TObject);
     procedure FillArr(ASQLQuery: TSQLQuery; ACBox: TComboBox;
       var AArr: TArrStr; var AarrDB: TArrStr);
+    procedure CheckRowsForEmty;
     //constructor Create(TheOwner: TObject);
   private
     { private declarations }
@@ -253,6 +255,7 @@ begin
   begin
     for j := 1 to high(Cells[i]) do
     begin
+      Cells[i][j].FFilled := false;
       for k := 0 to Cells[i][j].FCount - 1 do
       begin
         Cells[i][j].AddRecord;
@@ -343,6 +346,7 @@ begin
     end;
     DrawGrid1.Repaint;
   end;
+  CheckRowsForEmty;
   Draw := True;
 end;
 
@@ -367,7 +371,7 @@ end;
 
 procedure TTimeTableForm.ParametersBoxItemClick(Sender: TObject; Index: integer);
 begin
-  ExecuteBut.Click;
+  // ExecuteBut.Click;
 end;
 
 procedure TTimeTableForm.DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
@@ -498,6 +502,7 @@ begin
             begin
               TextOut(Arect.Left + 1, ARect.Top + 1 + j * 20 +
                 LastTopForButtons * i, FData[j]);
+              Cells[aCol][aRow].FFilled := true;
             end;
             for k := 0 to high(FButtons) do
             begin
@@ -663,9 +668,10 @@ begin
   ASQLQuery.SQl.Text := 'SELECT ' + ' * ' +
     //TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[1] +
     //'.' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[0] +
-    ' FROM ' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldTabNForJoin +
-    ' ORDER BY ' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldTabNForJoin +
-    '.' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForJoin;
+    ' FROM ' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldTabNForJoin
+    + ' ORDER BY ' + DataTables.FTables[SchTabInd].TabFields[
+    ACBox.ItemIndex].FieldTabNForJoin + '.' +
+    DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForJoin;
   //ShowMessage(ASQLQuery.SQl.Text);
   //Edit1.Text := ASQLQuery.SQl.Text;
   ASQLQuery.Open;
@@ -673,13 +679,56 @@ begin
   begin
     SetLength(AArr, length(AArr) + 1);
     AArr[high(AArr)] :=
-      ASQLQuery.FieldByName(DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForSel).AsString;
+      ASQLQuery.FieldByName(DataTables.FTables[SchTabInd].TabFields[
+      ACBox.ItemIndex].FieldFNForSel).AsString;
 
     SetLength(AarrDB, length(AarrDB) + 1);
-    AarrDB[high(AarrDB)] := ASQLQuery.FieldByName(DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForJoin).AsString;
+    AarrDB[high(AarrDB)] := ASQLQuery.FieldByName(
+      DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForJoin).AsString;
     ASQLQuery.Next;
   end;
   ASQLQuery.Close;
+end;
+
+procedure TTimeTableForm.CheckRowsForEmty;
+var
+  i, j, Count: integer;
+begin
+  if ParametersBox.Checked[1] then
+  begin
+    //for i := 1 to high(Cells) do
+    //begin
+    //  Count := 0;
+    //  for j := 1 to high(Cells[i]) do
+    //  begin
+    //    if Cells[i][j].FHeight <= 10 then
+    //    begin
+    //      Count += 1;
+    //    end;
+    //    ShowMessage(IntToStr(Count) + ' ' + IntToStr(length(Cells[i]) - 1));
+    //    if Count = length(Cells[i]) - 1 then
+    //    begin
+    //      //ShowMessage(IntToStr(Count) + ' ' + IntToStr(length(Cells[i])));
+    //    end;
+    //  end;
+    //end;
+    for i := 1 to high(Cells) do
+    begin
+      Count := 0;
+      for j := 1 to high(Cells[i]) do
+      begin
+        if not Cells[i][j].FFilled then
+        begin
+          Count += 1;
+        end;
+      end;
+      ShowMessage(IntToStr(Count) + ' ' + IntToStr(length(Cells[i])- 1));
+      if Count = length(Cells[i]) then
+      begin
+
+      end;
+    end;
+  end;
 end;
 
 end.
