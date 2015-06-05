@@ -9,8 +9,7 @@ uses
 
 function SQLCreateJoin(TableInfo: TMyTableInf): string;
 function SQlCreateSetToSel(TableInfo: TMyTableInf): string;
-function SQLCreateQuery(AFilterFrame: TChildFirstFrame; ATableName: string): string;
-function SQLCreateQueryFTT(AFilterFrame: TChildFirstFrame): string;
+function SQLCreateQuery(AFilterFrame: TChildFirstFrame; ATableName: string; AddSelect: boolean): string;
 function SQLCreateUpdate(Table: TMyTableInf; ADataObjects: array of TComponent;
   AUniqueFieldVal: string; SQLQuery: TSQLQuery): string;
 function SQLCreateInsert(Table: TMyTableInf; ADataObjects: array of TComponent;
@@ -61,16 +60,27 @@ begin
   end;
 end;
 
-function SQLCreateQuery(AFilterFrame: TChildFirstFrame; ATableName: string): string;
+function SQLCreateQuery(AFilterFrame: TChildFirstFrame; ATableName: string; AddSelect: boolean): string;
 
 const
   SPQuery = 'SELECT * FROM ';
 var
   i: integer;
 begin
-  Result := SPQuery + ATableName;
+  if AddSelect then
+  begin
+    Result := SPQuery + ATableName;
+  end else
+  begin
+    Result := '';
+  end;
   with AFilterFrame do
   begin
+    if BaseParentFrameOnLv.STRValue.Text = '' then
+    begin
+      Result := '';
+      exit;
+    end;
     Result += SQLGetOutCFrame;
     for i := 0 to GetHighFilter do
     begin
@@ -81,33 +91,6 @@ begin
       end
       else
         Result += Filter[i].SQLGetOutAddFrame;
-    end;
-  end;
-end;
-
-function SQLCreateQueryFTT(AFilterFrame: TChildFirstFrame): string;
-var
-  i: integer;
-
-begin
-  Result := '';
-  with AFilterFrame do
-  begin
-    if BaseParentFrameOnLv.STRValue.Text = '' then
-    begin
-      Result := ' ';
-      exit;
-    end;
-    Result += SQLGetOutCFrameFTT;
-    for i := 0 to GetHighFilter do
-    begin
-      if Filter[i].BaseParentFrameOnLV.STRValue.Text = '' then
-      begin
-        Filter[i].Needed := False;
-        //Continue;
-      end
-      else
-        Result += Filter[i].SQLGetOutAddFrameFTT;
     end;
   end;
 end;

@@ -45,6 +45,7 @@ type
     procedure EditClean(Edit: TEdit);
     procedure LastControlCheck;
     procedure RefreshCards;
+    procedure TableFill(AParent: TComponent; TableInfo: TMyTableInf; ChildFlag: boolean);
     function CheckAllCards(ID: integer): boolean;
   private
     SaveFirstQuery: string;
@@ -82,51 +83,11 @@ begin
     FType := DataTables.FTables[Table].TabFields[Field].FieldType;
     if ChildFirstFrameOnLV.BaseParentFrameOnLv.STRValue.Text = '' then
       exit;
-    SQLExecute(SQLQuery, SQLCreateQuery(ChildFirstFrameOnLV, SaveFirstQuery));
+    SQLExecute(SQLQuery, SQLCreateQuery(ChildFirstFrameOnLV, SaveFirstQuery, true));
     with SQLQuery do
     begin
-      SaveLastQuery := SQL.Text;
-      Prepare;
-      with ChildFirstFrameOnLV do
-      begin
-        if (FType = ftString) then
-        begin
-          ParamByName('pChildF').AsString := BaseParentFrameOnLV.STRValue.Text;
-        end;
-        if (FType = ftInteger) then
-        begin
-          ParamByName('pChildF').AsInteger :=
-            StrToInt(BaseParentFrameOnLV.STRValue.Text);
-        end;
-        str := '';
-        for i := 0 to GetHighFilter do
-        begin
-          if Filter[i].Needed then
-          begin
-            Table := BaseParentFrameOnLv.Tag;
-            Field := Filter[i].BaseParentFrameOnLV.FieldNameBox.ItemIndex;
-            FType := DataTables.FTables[Table].TabFields[Field].FieldType;
-            str := 'p' + IntToStr(Filter[i].NumberOfParametr);
-            if (FType = ftString) then
-            begin
-              ParamByName(str).AsString := Filter[i].BaseParentFrameOnLV.STRValue.Text;
-            end;
-            if (FType = ftInteger) then
-            begin
-              ParamByName(str).AsInteger :=
-                StrToInt(Filter[i].BaseParentFrameOnLV.STRValue.Text);
-            end;
-            EditClean(Filter[i].BaseParentFrameOnLV.STRValue);
-          end
-          else
-            Filter[i].Needed := True;
-        end;
-        EditClean(BaseParentFrameOnLV.STRValue);
-        Open;
-        LastControlCheck;
-      end;
+      SQLQuery.Open;
     end;
-    Execute.Enabled := False;
   except
     on EConvertError do
       ShowMessage('Введены некорректные данные');
@@ -297,6 +258,41 @@ begin
   end;
 end;
 
+procedure TListViewForm.TableFill(AParent: TComponent; TableInfo: TMyTableInf; ChildFlag: boolean);
+var
+  i: integer;
+begin
+  Tag := TMenuItem(AParent).Tag;
+  if ChildFlag then
+  begin
+    inherited Create(AParent);
+  end else
+  begin
+    inherited Create(TMenuItem(AParent));
+  end;
+  Caption := TableInfo.TabAppName;
+  AppropriateItem := TMenuItem(AParent);
+  ShowAllTable(TableInfo);
+  with TableInfo do
+  begin
+    for i := 0 to high(TabFields) do
+    begin
+      with DBGrid.Columns.Add do
+      begin
+        if TabFields[i].FieldNeedFJoin then
+          FieldName := TabFields[i].FieldFNForSel
+        else
+          FieldName := TabFields[i].FieldDBName;
+        Width := TabFields[i].FieldWidth;
+        Title.Caption := TabFields[i].FieldAppName;
+        Visible := TabFields[i].FieldVisible;
+      end;
+    end;
+  end;
+  LastSortCol := nil;
+  ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
+end;
+
 function TListViewForm.CheckAllCards(ID: integer): boolean;
 var
   i: integer;
@@ -323,29 +319,30 @@ constructor TListViewForm.CreateDirectoryForm(MyParent: TObject;
 var
   i: integer;
 begin
-  Tag := TMenuItem(MyParent).Tag;
-  inherited Create(TMenuItem(MyParent));
-  Caption := TableInfo.TabAppName;
-  AppropriateItem := TMenuItem(MyParent);
-  ShowAllTable(TableInfo);
-  with TableInfo do
-  begin
-    for i := 0 to high(TabFields) do
-    begin
-      with DBGrid.Columns.Add do
-      begin
-        if TabFields[i].FieldNeedFJoin then
-          FieldName := TabFields[i].FieldFNForSel
-        else
-          FieldName := TabFields[i].FieldDBName;
-        Width := TabFields[i].FieldWidth;
-        Title.Caption := TabFields[i].FieldAppName;
-        Visible := TabFields[i].FieldVisible;
-      end;
-    end;
-  end;
-  LastSortCol := nil;
-  ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
+  TableFill(TComponent(MyParent), TableInfo, false);
+  //Tag := TMenuItem(MyParent).Tag;
+  //inherited Create(TMenuItem(MyParent));
+  //Caption := TableInfo.TabAppName;
+  //AppropriateItem := TMenuItem(MyParent);
+  //ShowAllTable(TableInfo);
+  //with TableInfo do
+  //begin
+  //  for i := 0 to high(TabFields) do
+  //  begin
+  //    with DBGrid.Columns.Add do
+  //    begin
+  //      if TabFields[i].FieldNeedFJoin then
+  //        FieldName := TabFields[i].FieldFNForSel
+  //      else
+  //        FieldName := TabFields[i].FieldDBName;
+  //      Width := TabFields[i].FieldWidth;
+  //      Title.Caption := TabFields[i].FieldAppName;
+  //      Visible := TabFields[i].FieldVisible;
+  //    end;
+  //  end;
+  //end;
+  //LastSortCol := nil;
+  //ChildFirstFrameOnLV.ExecuteBFrLV := Execute;
 end;
 
 {constructor TListViewForm.Create(TheOwner: TComponent; TableInfo: TMyTableInf);

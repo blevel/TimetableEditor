@@ -1,11 +1,11 @@
 object TimeTableForm: TTimeTableForm
-  Left = 343
+  Left = 388
   Height = 617
-  Top = 117
-  Width = 1013
+  Top = 233
+  Width = 1001
   Caption = 'TimeTableForm'
   ClientHeight = 617
-  ClientWidth = 1013
+  ClientWidth = 1001
   OnCreate = FormCreate
   LCLVersion = '1.2.6.0'
   object PairSplitter1: TPairSplitter
@@ -13,7 +13,7 @@ object TimeTableForm: TTimeTableForm
     Left = -1
     Height = 617
     Top = 0
-    Width = 1014
+    Width = 1002
     Anchors = [akTop, akLeft, akRight, akBottom]
     OnChangeBounds = PairSplitter1ChangeBounds
     Position = 440
@@ -23,18 +23,19 @@ object TimeTableForm: TTimeTableForm
       Left = 0
       Height = 440
       Top = 0
-      Width = 1014
-      ClientWidth = 1014
+      Width = 1002
+      ClientWidth = 1002
       ClientHeight = 440
       object DrawGrid1: TDrawGrid
+        AnchorSideRight.Control = PairSplitterSide1
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = PairSplitterSide1
+        AnchorSideBottom.Side = asrBottom
         Left = 0
         Height = 440
         Top = 0
-        Width = 1016
+        Width = 1002
         Anchors = [akTop, akLeft, akRight, akBottom]
-        DefaultColWidth = 100
-        DefaultRowHeight = 100
-        DragMode = dmAutomatic
         ExtendedSelect = False
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSizing, goColSizing, goThumbTracking, goSmoothScroll]
         ParentShowHint = False
@@ -52,21 +53,21 @@ object TimeTableForm: TTimeTableForm
       Left = 0
       Height = 172
       Top = 445
-      Width = 1014
-      ClientWidth = 1014
+      Width = 1002
+      ClientWidth = 1002
       ClientHeight = 172
       object ScrollBox1: TScrollBox
         Left = 0
         Height = 172
         Top = 0
-        Width = 1013
-        HorzScrollBar.Page = 968
+        Width = 1001
+        HorzScrollBar.Page = 963
         HorzScrollBar.Tracking = True
-        VertScrollBar.Page = 161
+        VertScrollBar.Page = 134
         VertScrollBar.Tracking = True
         Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 168
-        ClientWidth = 1009
+        ClientHeight = 151
+        ClientWidth = 980
         TabOrder = 0
         object ExecuteBut: TButton
           Left = 24
@@ -102,14 +103,6 @@ object TimeTableForm: TTimeTableForm
           OnItemClick = FieldsBoxItemClick
           TabOrder = 3
         end
-        object Edit1: TEdit
-          Left = 88
-          Height = 23
-          Top = 120
-          Width = 80
-          TabOrder = 4
-          Text = 'Edit1'
-        end
         object Label1: TLabel
           Left = 24
           Height = 15
@@ -140,7 +133,7 @@ object TimeTableForm: TTimeTableForm
           Top = 64
           Width = 100
           ItemHeight = 15
-          TabOrder = 5
+          TabOrder = 4
         end
         object Label4: TLabel
           Left = 200
@@ -160,7 +153,7 @@ object TimeTableForm: TTimeTableForm
           )
           ItemHeight = 17
           OnItemClick = ParametersBoxItemClick
-          TabOrder = 6
+          TabOrder = 5
           Data = {
             0100000000
           }
@@ -184,7 +177,7 @@ object TimeTableForm: TTimeTableForm
             'По возрастанию'
             ''
           )
-          TabOrder = 7
+          TabOrder = 6
         end
       end
     end

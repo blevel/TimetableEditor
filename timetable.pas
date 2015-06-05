@@ -38,6 +38,7 @@ type
     FCount: integer;
     procedure AddRecord;
     procedure AddButton(AButton: TMyButton);
+    destructor Destroy; override;
   end;
 
   TMyStringList = class(TStringList)
@@ -48,6 +49,7 @@ type
   { TTimeTableForm }
 
   TTimeTableForm = class(TForm)
+    DrawGrid1: TDrawGrid;
     SortOrderBox: TComboBox;
     ExecuteBut: TButton;
     FieldsBox: TCheckListBox;
@@ -57,7 +59,6 @@ type
     ColumnsBox: TComboBox;
     SortBox: TComboBox;
     DataSource1: TDataSource;
-    DrawGrid1: TDrawGrid;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -65,7 +66,6 @@ type
     Label5: TLabel;
     Lable1: TLabel;
     Lable2: TLabel;
-    Edit1: TEdit;
     PairSplitter1: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
@@ -98,7 +98,7 @@ type
     DBStrings: array of string;
     Cells: array of array of TCell;
     //MyButtons: array of array of TButtonAdd;
-    Flag: boolean;
+    Draw: boolean;
     AdditionalFields: array of string;
     LastTopForButtons: integer;
     CellForDrag: TCell;
@@ -109,7 +109,8 @@ type
 
 { TMyStringList }
 
-
+const
+  SchTabInd = 8;
 
 var
   TimeTableForm: TTimeTableForm;
@@ -119,23 +120,6 @@ implementation
 {$R *.lfm}
 
 { TMyRecord }
-
-procedure EditClean(Edit: TEdit);
-var
-  s: string;
-begin
-  s := Edit.Text;
-  if (s[1] = '%') then
-  begin
-    Delete(s, 1, 1);
-    Edit.Text := s;
-  end;
-  if (s[length(s)] = '%') then
-  begin
-    Delete(s, length(s), 1);
-    Edit.Text := s;
-  end;
-end;
 
 procedure TMyRecord.AddButton(AButton: TMyButton);
 begin
@@ -157,6 +141,15 @@ begin
   FButtons[high(FButtons)] := AButton;
 end;
 
+destructor TCell.Destroy;
+begin
+  //for i := 0 to high(FRecords) do
+  //begin
+
+  //end;
+  inherited Destroy;
+end;
+
 { TTimeTableForm }
 
 procedure TTimeTableForm.ExecuteButClick(Sender: TObject);
@@ -167,39 +160,52 @@ var
   STRCOL, STRROW: string;
 begin
   //Нужно для совпадения номеров клеток
+  //for i := 0 to high(Cells) do
+  //begin
+  //  for j := 0 to high(Cells[i]) do
+  //  begin
+  //    //Cells[i][j].Free;
+  //    //Freemem(Cells[i][j]);
+  //    if Cells[i][j] <> Nil then
+  //    begin
+  //      Cells[i][j].Destroy;
+  //    end;
+  //  end;
+  //end;
+  SetLength(Cells, 0);
+  //for i := 0 to high(Strings) do
+  //begin
+  //  Strings[i]
+  //end;
   SetLength(Strings, 1);
   SetLength(Columns, 1);
 
   FillArr(SQLQuery1, ColumnsBox, Columns, DBColumns);
   FillArr(SQLQuery1, RowsBox, Strings, DBStrings);
 
+  with DataTables.FTables[SchTabInd] do
+  begin
+    SQLbuf := 'SELECT * FROM ' + TabDBName + ' ';
+    SQLbuf += SQLCreateJoin(DataTables.FTables[SchTabInd]);
+    SQLbuf += ' ' + SQLCreateQuery(ChildFirstFrame1, TabDBName, False);
+    SQLbuf += ' ORDER BY ' + TabFields[ColumnsBox.ItemIndex].FieldTabNForJoin +
+      '.' + TabFields[ColumnsBox.ItemIndex].FieldDBName + ' , ' +
+      TabFields[RowsBox.ItemIndex].FieldTabNForJoin + '.' +
+      TabFields[RowsBox.ItemIndex].FieldDBName + ' , ' +
+      TabFields[SortBox.ItemIndex].FieldTabNForJoin + '.' +
+      TabFields[SortBox.ItemIndex].FieldDBName;
+  end;
 
-  SQLQuery1.SQL.Text := 'SELECT * FROM SCHEDULES';
-  for l := 0 to FieldsBox.Count - 1 do
-  begin
-    SQLbuf := SQLQuery1.SQL.Text;
-    SQLbuf += ' INNER JOIN ' + TStringList(FieldsBox.Items.Objects[l]).Strings[1] +
-      ' ON SCHEDULES.' + TStringList(FieldsBox.Items.Objects[l]).Strings[2] +
-      ' = ' + TStringList(FieldsBox.Items.Objects[l]).Strings[1] +
-      '.' + TStringList(FieldsBox.Items.Objects[l]).Strings[2];
-    SQLQuery1.SQL.Text := SQLbuf;
-  end;
-  SQLbuf := SQLQuery1.SQL.Text;
-  SQLbuf += ' ' + SQLCreateQueryFTT(ChildFirstFrame1);
-  SQLbuf += ' ORDER BY ' + TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[1]
-  + '.' + TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[3] + ' , '
-  + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[1] + '.'
-  + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[3] + ' , '
-  + TStringList(SortBox.Items.Objects[SortBox.ItemIndex]).Strings[1] + '.'
-  + TStringList(SortBox.Items.Objects[SortBox.ItemIndex]).Strings[3];
-  if SortBox.ItemIndex = 0 then
-  begin
-    SQLbuf += ' DESC ';
-  end;
-  if SortBox.ItemIndex = 1 then
-  begin
-    SQLbuf += ' ASC ';
-  end;
+
+  //ShowMessage(SQLbuf);
+  //if SortBox.ItemIndex = 0 then
+  //begin
+  //  SQLbuf += ' DESC ';
+  //end;
+  //if SortBox.ItemIndex = 1 then
+  //begin
+  //  SQLbuf += ' ASC ';
+  //end;
 
   SQLQuery1.SQL.Text := SQLbuf;
   //Edit1.Text := SQLQuery1.SQL.Text;
@@ -220,16 +226,14 @@ begin
   end;
 
 
-  STRCOl := TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[0];
-  STRROW := TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[0];
+  STRCOl := DataTables.FTables[SchTabInd].TabFields[ColumnsBox.ItemIndex].FieldFNForSel;
+  STRROW := DataTables.FTables[SchTabInd].TabFields[RowsBox.ItemIndex].FieldFNForSel;
   while not SQLQuery1.EOF do
   begin
     for i := 1 to high(Columns) do
     begin
       for j := 1 to high(Strings) do
       begin
-        //ShowMessage(Strings[i] +' ' + Columns[j]);
-        //ShowMessage(SQLQuery1.FieldByName(STRCOL).AsString + ' ' + SQLQuery1.FieldByName(STRROW).AsString);
         if (SQLQuery1.FieldByName(STRCOL).AsString = Columns[i]) and
           (SQLQuery1.FieldByName(STRROW).AsString = Strings[j]) then
         begin
@@ -239,10 +243,11 @@ begin
     end;
     SQLQuery1.Next;
   end;
-  SQLbuf := SQLQuery1.SQL.Text;
-  SQLQuery1.Close;
-  SQLQuery1.SQL.Text := SQLbuf;
-  SQLQuery1.Open;
+  //SQLbuf := SQLQuery1.SQL.Text;
+  //SQLQuery1.Close;
+  //SQLQuery1.SQL.Text := SQLbuf;
+  //SQLQuery1.Open;
+  SQLQuery1.First;
 
   for i := 1 to high(Cells) do
   begin
@@ -257,8 +262,8 @@ begin
           LocalFlag := True;
           for h := 0 to FieldsBox.Count - 1 do
           begin
-            if (DataTables.FTables[8].TabFields[l].FieldFNForSel =
-              TStringList(FieldsBox.Items.Objects[h]).Strings[0]) and
+            if (DataTables.FTables[SchTabInd].TabFields[l].FieldFNForSel =
+              DataTables.FTables[SchTabInd].TabFields[h].FieldFNForSel) and
               (FieldsBox.Checked[h] = False) then
             begin
               LocalFlag := False;
@@ -285,7 +290,6 @@ begin
         end;
         Cells[i][j].FRecords[high(Cells[i][j].FRecords)].FID :=
           SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;
-        ;
         SQLQuery1.Next;
       end;
       for c := 0 to Cells[i][j].FCount - 1 do
@@ -294,14 +298,16 @@ begin
         begin
           FRecords[c].AddButton(TButtonChange.Create);
           FRecords[c].AddButton(TButtonDelete.Create);
-          //Frecords[c].FID :=
-          //  SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;
         end;
       end;
-      Cells[i][j].AddButton(TButtonChHeight.Create);
-      Cells[i][j].AddButton(TButtonAdd.Create);
-      Cells[i][j].AddButton(TButttonShowOnLV.Create);
-      Cells[i][j].FSQL := SQLQuery1.SQL.Text;
+      with Cells[i][j] do
+      begin
+        AddButton(TButtonChHeight.Create);
+        AddButton(TButtonAdd.Create);
+        AddButton(TButttonShowOnLV.Create);
+        FSQL := SQLQuery1.SQL.Text;
+      end;
+
     end;
   end;
 
@@ -317,22 +323,27 @@ begin
     end;
   end;
   SQLQuery1.Close;
+
+
   DrawGrid1.RowCount := length(Strings);
   DrawGrid1.ColCount := length(Columns);
-  DrawGrid1.DefaultRowHeight := 150;
-  DrawGrid1.DefaultColWidth := 150;
-  DrawGrid1.RowHeights[0] := 25;
-  DrawGrid1.ColWidths[0] := 50;
-  for i := 0 to DrawGrid1.RowCount - 1 do
+  with DrawGrid1 do
   begin
-    DrawGrid1.RowHeights[i] := 150;
+    DefaultRowHeight := 150;
+    DefaultColWidth := 150;
+    RowHeights[0] := 25;
+    ColWidths[0] := 50;
+    for i := 1 to RowCount - 1 do
+    begin
+      RowHeights[i] := 160;
+    end;
+    for i := 1 to ColCount - 1 do
+    begin
+      ColWidths[i] := 160;
+    end;
+    DrawGrid1.Repaint;
   end;
-  for i := 0 to DrawGrid1.ColCount - 1 do
-  begin
-    DrawGrid1.ColWidths[i] := 150;
-  end;
-  Flag := True;
-  DrawGrid1.Repaint;
+  Draw := True;
 end;
 
 procedure TTimeTableForm.FieldsBoxItemClick(Sender: TObject; Index: integer);
@@ -387,13 +398,13 @@ begin
     for i := 0 to high(FRecords) do
     begin
       try
-      Str := '';
-      SQLQuery1.Close;
-      Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
-        'Schedules' + '.' + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] + ' = ' + DBStrings[aRow - 1] + ', Schedules' + '.' +
-        TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[2] +
-        ' = ' + DBColumns[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
-        IntToStr(FRecords[i].FID);
+        Str := '';
+        SQLQuery1.Close;
+        Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
+          'Schedules' + '.' + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] + ' = ' + DBStrings[aRow - 1] + ', Schedules' + '.' +
+          TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[2] +
+          ' = ' + DBColumns[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
+          IntToStr(FRecords[i].FID);
         SQLQuery1.SQL.Text := Str;
         SQLQuery1.ExecSQL;
         DBConnectionMod.SQLTransaction.Commit;
@@ -404,8 +415,8 @@ begin
           SQLQuery1.Close;
           Str := '';
           Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
-            'Schedules' + '.' +
-            TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] +
+            'Schedules' + '.' + TStringList(
+            RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] +
             ' = ' + DBColumns[aRow - 1] + ', Schedules' + '.' +
             TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[2] +
             ' = ' + DBStrings[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
@@ -455,7 +466,7 @@ procedure TTimeTableForm.DrawGrid1DrawCell(Sender: TObject;
 var
   i, j, k: integer;
 begin
-  if Flag then
+  if Draw then
   begin
     if (acol = 0) and (aRow > 0) and (aRow <= high(Strings)) then
     begin
@@ -523,7 +534,7 @@ var
   aCol, aRow, i, j: integer;
   Str: string;
 begin
-  if Flag then
+  if Draw then
   begin
     DrawGrid1.MouseToCell(X, Y, aCol, aRow);
     if (aCol = 0) or (aRow = 0) then
@@ -571,7 +582,6 @@ begin
     begin
       if PtInRect(FButtons[i].FRect, APoint) then
       begin
-        //SQLQuery1.Close;
         FButtons[i].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
           SQLQuery1, DataTables.FTables[8], 0, Columns[aCol],
           Strings[aRow], ColumnsBox.ItemIndex, RowsBox.ItemIndex, ChildFirstFrame1);
@@ -610,28 +620,16 @@ var
   Str: array of TStringList;
 begin
   //Tag := 8;
-  Flag := False;
+  Draw := False;
   FlagForDrag := False;
   for i := 0 to high(DataTables.FTables[8].TabFields) - 1 do
   begin
-    SetLength(Str, length(Str) + 1);
-    SetLength(AdditionalFields, length(AdditionalFields) + 1);
-    AdditionalFields[high(AdditionalFields)] :=
-      DataTables.FTables[8].TabFields[i].FieldFNForSel;
-    Str[high(Str)] := TStringList.Create;
-    with DataTables.FTables[8].TabFields[i] do
+    with DataTables.FTables[SchTabInd].TabFields[i] do
     begin
-      with Str[high(Str)] do
-      begin
-        Add(FieldFNForSel);
-        Add(FieldTabNForJoin);
-        Add(FieldFNForJoin);
-        Add(FieldForSort);
-      end;
-      RowsBox.Items.AddObject(FieldAppName, Str[high(Str)]);
-      ColumnsBox.Items.AddObject(FieldAppName, Str[high(Str)]);
-      SortBox.Items.AddObject(FieldAppName, Str[high(Str)]);
-      FieldsBox.AddItem(FieldAppName, Str[high(Str)]);
+      RowsBox.Items.Add(FieldAppName);
+      ColumnsBox.Items.Add(FieldAppName);
+      SortBox.Items.Add(FieldAppName);
+      FieldsBox.Items.Add(FieldAppName);
     end;
   end;
   FieldsBox.CheckAll(cbChecked);
@@ -647,8 +645,11 @@ begin
   RowsBox.ItemIndex := 0;
   ColumnsBox.ItemIndex := 0;
   SortBox.ItemIndex := 0;
-  SortOrderBox.ItemIndex := 0;
+  //SortOrderBox.ItemIndex := 0;
+  //ExecuteBut.Click;
 end;
+
+
 
 procedure TTimeTableForm.PairSplitter1ChangeBounds(Sender: TObject);
 begin
@@ -662,21 +663,20 @@ begin
   ASQLQuery.SQl.Text := 'SELECT ' + ' * ' +
     //TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[1] +
     //'.' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[0] +
-    ' FROM ' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[1] +
-    ' ORDER BY ' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[1] +
-    '.' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[3];
+    ' FROM ' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldTabNForJoin +
+    ' ORDER BY ' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldTabNForJoin +
+    '.' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForJoin;
   //ShowMessage(ASQLQuery.SQl.Text);
-  Edit1.Text := ASQLQuery.SQl.Text;
+  //Edit1.Text := ASQLQuery.SQl.Text;
   ASQLQuery.Open;
   while not ASQLQuery.EOF do
   begin
     SetLength(AArr, length(AArr) + 1);
     AArr[high(AArr)] :=
-      ASQLQuery.FieldByName(TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[0]).AsString;
+      ASQLQuery.FieldByName(DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForSel).AsString;
 
     SetLength(AarrDB, length(AarrDB) + 1);
-    AarrDB[high(AarrDB)] := ASQLQuery.FieldByName(
-      TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[2]).AsString;
+    AarrDB[high(AarrDB)] := ASQLQuery.FieldByName(DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForJoin).AsString;
     ASQLQuery.Next;
   end;
   ASQLQuery.Close;

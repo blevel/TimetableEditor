@@ -20,7 +20,6 @@ type
     procedure AndOrBoxChange(Sender: TObject);
     constructor CreateAdditional(TheOwner: TComponent; ALeft, ATop: integer);
     function SQLGetOutAddFrame: string;
-    function SQLGetOutAddFrameFTT: string;
   private
     FNumberOfParametr: integer;
   public
@@ -50,60 +49,6 @@ begin
 end;
 
 function TAdditionalFilterFrame.SQLGetOutAddFrame: string;
-const
-  CQuery = '%s.%s ';
-var
-  Table, Field, Operate: integer;
-  str: string;
-begin
-  Result := '';
-  with AndOrBox do
-  begin
-    case ItemIndex of
-      0: Result += ' AND ';
-      1: Result += ' OR ';
-    end;
-  end;
-  Table := Tag;
-  with BaseParentFrameOnLV do
-  begin
-    Field := FieldNameBox.ItemIndex;
-    Operate := OperationBox.ItemIndex;
-    with DataTables.FTables[Table] do
-    begin
-      with TabFields[Field] do
-      begin
-        if FieldNeedFJoin then
-        begin
-          Result += '(' + Format(CQuery, [FieldTabNForJoin, FieldFNForSel]);
-        end
-        else
-        begin
-          Result += '(' + Format(CQuery, [TabDBName, FieldDBName]);
-        end;
-      end;
-    end;
-    if SQLOperations[Operate] = ' LIKE ' then
-    begin
-      Result += SQLOperations[Operate];
-      Result += ' :p' + IntToStr(FNumberOfParametr) + ' ) ';
-      str := BaseParentFrameOnLV.STRValue.Text;
-      if (BaseParentFrameOnLv.OperationBox.ItemIndex = 4) then
-      begin
-        BaseParentFrameOnLv.STRValue.Text := '%' + str + '%';
-      end;
-      if (BaseParentFrameOnLv.OperationBox.ItemIndex = 5) then
-      begin
-        BaseParentFrameOnLv.STRValue.Text := str + '%';
-      end;
-      exit;
-    end;
-    Result += SQLOperations[Operate];
-    Result += ' :p' + IntToStr(FNumberOfParametr) + ' ) ';
-  end;
-end;
-
-function TAdditionalFilterFrame.SQLGetOutAddFrameFTT: string;
 const
   CQuery = '%s.%s ';
 var
