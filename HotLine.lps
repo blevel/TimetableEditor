@@ -9,10 +9,10 @@
         <Filename Value="HotLine.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="HotLine"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="35" Y="12"/>
+        <CursorPos X="39" Y="1"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -88,7 +88,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="FilterFrame"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="35"/>
         <CursorPos X="2" Y="44"/>
@@ -102,10 +102,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="ChildFirstFrame"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="90"/>
-        <CursorPos X="38" Y="23"/>
+        <TopLine Value="1"/>
+        <CursorPos X="14" Y="28"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="addfilterframe.pas"/>
@@ -114,10 +116,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="addfilterframe"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="54"/>
-        <CursorPos X="40" Y="22"/>
+        <TopLine Value="1"/>
+        <CursorPos X="5" Y="16"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit9>
       <Unit10>
         <Filename Value="myframe.pas"/>
@@ -162,9 +166,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="819"/>
-        <CursorPos X="5" Y="864"/>
-        <UsageCount Value="166"/>
+        <TopLine Value="813"/>
+        <CursorPos X="1" Y="848"/>
+        <UsageCount Value="174"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit13>
@@ -175,7 +179,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="139"/>
+        <UsageCount Value="147"/>
       </Unit14>
       <Unit15>
         <Filename Value="mybut.pas"/>
@@ -184,7 +188,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="177"/>
         <CursorPos X="82" Y="207"/>
-        <UsageCount Value="138"/>
+        <UsageCount Value="146"/>
       </Unit15>
       <Unit16>
         <Filename Value="listviewchild.pas"/>
@@ -193,7 +197,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="7" Y="57"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="106"/>
       </Unit16>
       <Unit17>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\packages\fcl-db\src\base\db.pas"/>
@@ -201,7 +205,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1566"/>
         <CursorPos X="14" Y="1590"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit17>
       <Unit18>
         <Filename Value="C:\lazarus\lcl\menus.pp"/>
@@ -209,14 +213,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="199"/>
         <CursorPos X="15" Y="224"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit18>
       <Unit19>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\objpash.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="166"/>
         <CursorPos X="23" Y="192"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit19>
       <Unit20>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
@@ -224,7 +228,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1340"/>
         <CursorPos X="15" Y="1365"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="21"/>
       </Unit20>
       <Unit21>
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
@@ -232,7 +236,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="3" Y="51"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="25"/>
       </Unit21>
       <Unit22>
         <Filename Value="C:\lazarus\lcl\lclclasses.pp"/>
@@ -240,31 +244,31 @@
         <WindowIndex Value="0"/>
         <TopLine Value="88"/>
         <CursorPos X="15" Y="116"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit22>
       <Unit23>
         <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2166"/>
         <CursorPos X="41" Y="2179"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="11"/>
       </Unit23>
       <Unit24>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="822"/>
         <CursorPos X="15" Y="850"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="18"/>
         <Loaded Value="True"/>
       </Unit24>
       <Unit25>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\stringl.inc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="905"/>
         <CursorPos X="3" Y="911"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit25>
       <Unit26>
@@ -273,14 +277,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="468"/>
         <CursorPos X="23" Y="490"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit26>
       <Unit27>
         <Filename Value="C:\lazarus\lcl\include\control.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1606"/>
         <CursorPos X="32" Y="1632"/>
-        <UsageCount Value="33"/>
+        <UsageCount Value="32"/>
       </Unit27>
       <Unit28>
         <Filename Value="C:\lazarus\lcl\filectrl.pp"/>
@@ -288,21 +292,21 @@
         <WindowIndex Value="0"/>
         <TopLine Value="155"/>
         <CursorPos X="14" Y="181"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit28>
       <Unit29>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\objpas.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="273"/>
         <CursorPos X="12" Y="276"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit29>
       <Unit30>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\compon.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="579"/>
         <CursorPos X="3" Y="581"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit30>
       <Unit31>
         <Filename Value="C:\LANG\lazarus\lcl\forms.pp"/>
@@ -310,7 +314,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="321"/>
         <CursorPos X="17" Y="285"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit31>
       <Unit32>
         <Filename Value="C:\lazarus\lcl\lclproc.pas"/>
@@ -318,7 +322,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="835"/>
         <CursorPos X="24" Y="855"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit32>
       <Unit33>
         <Filename Value="C:\lazarus\lcl\stdctrls.pp"/>
@@ -326,14 +330,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="339"/>
         <CursorPos X="49" Y="344"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit33>
       <Unit34>
         <Filename Value="C:\lazarus\lcl\include\customcombobox.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="755"/>
         <CursorPos X="3" Y="764"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit34>
       <Unit35>
         <Filename Value="C:\lazarus\lcl\widgetset\wsstdctrls.pp"/>
@@ -341,7 +345,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
         <CursorPos X="20" Y="75"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit35>
       <Unit36>
         <Filename Value="C:\lazarus\components\synedit\lazsynimm.pas"/>
@@ -349,7 +353,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="203"/>
         <CursorPos X="31" Y="229"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit36>
       <Unit37>
         <Filename Value="C:\lazarus\lcl\dbgrids.pas"/>
@@ -357,7 +361,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="213"/>
         <CursorPos X="41" Y="137"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit37>
       <Unit38>
         <Filename Value="..\..\Editorv7\TimetableEditor-master\sqlcreating.pas"/>
@@ -365,7 +369,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="59" Y="13"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
       </Unit38>
       <Unit39>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\packages\fcl-db\src\sqldb\sqldb.pp"/>
@@ -373,7 +377,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="413"/>
         <CursorPos X="44" Y="424"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit39>
       <Unit40>
         <Filename Value="..\..\Editorv11\TimetableEditor-master\listview.pas"/>
@@ -381,7 +385,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="112"/>
         <CursorPos X="1" Y="138"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit40>
       <Unit41>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\packages\fcl-db\src\sqldb\interbase\ibconnection.pp"/>
@@ -389,7 +393,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit41>
       <Unit42>
         <Filename Value="C:\lazarus\lcl\dbctrls.pp"/>
@@ -397,14 +401,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1395"/>
         <CursorPos X="45" Y="1450"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit42>
       <Unit43>
         <Filename Value="C:\lazarus\lcl\include\dblookup.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="183"/>
         <CursorPos X="61" Y="196"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit43>
       <Unit44>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\packages\fcl-db\src\base\bufdataset.pas"/>
@@ -412,28 +416,28 @@
         <WindowIndex Value="0"/>
         <TopLine Value="2237"/>
         <CursorPos X="3" Y="2288"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit44>
       <Unit45>
         <Filename Value="C:\lazarus\lcl\include\scrollingwincontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="217"/>
         <CursorPos X="3" Y="248"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit45>
       <Unit46>
         <Filename Value="C:\lazarus\lcl\include\customcontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="15"/>
         <CursorPos X="3" Y="24"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit46>
       <Unit47>
         <Filename Value="C:\lazarus\lcl\include\wincontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8025"/>
         <CursorPos X="1" Y="8051"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit47>
       <Unit48>
         <Filename Value="..\..\Editorv20\TimetableEditor-master\listview.pas"/>
@@ -441,7 +445,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="75"/>
         <CursorPos X="32" Y="194"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit48>
       <Unit49>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32wsstdctrls.pp"/>
@@ -449,7 +453,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1191"/>
         <CursorPos X="1" Y="1222"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit49>
       <Unit50>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32proc.pp"/>
@@ -457,7 +461,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1046"/>
         <CursorPos X="1" Y="1071"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit50>
       <Unit51>
         <Filename Value="C:\lazarus\components\synedit\syneditfoldedview.pp"/>
@@ -465,7 +469,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="326"/>
         <CursorPos X="24" Y="351"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit51>
       <Unit52>
         <Filename Value="C:\lazarus\lcl\graphics.pp"/>
@@ -473,7 +477,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1177"/>
         <CursorPos X="15" Y="1203"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit52>
       <Unit53>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\types.pp"/>
@@ -481,14 +485,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="57"/>
         <CursorPos X="3" Y="83"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit53>
       <Unit54>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\wininc\struct.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="207"/>
         <CursorPos X="6" Y="233"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit54>
       <Unit55>
         <Filename Value="C:\lazarus\lcl\grids.pas"/>
@@ -496,21 +500,21 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1370"/>
         <CursorPos X="14" Y="1395"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="35"/>
       </Unit55>
       <Unit56>
         <Filename Value="C:\lazarus\lcl\include\customlistbox.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="171"/>
         <CursorPos X="96" Y="194"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit56>
       <Unit57>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32listsl.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="533"/>
         <CursorPos X="1" Y="559"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit57>
       <Unit58>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32int.pp"/>
@@ -518,7 +522,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
         <CursorPos X="53" Y="26"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit58>
       <Unit59>
         <Filename Value="C:\lazarus\lcl\comctrls.pp"/>
@@ -526,53 +530,53 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="52" Y="23"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit59>
       <Unit60>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\wininc\func.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="593"/>
         <CursorPos X="10" Y="619"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
       </Unit60>
       <Unit61>
         <Filename Value="C:\lazarus\lcl\include\menuitem.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1036"/>
         <CursorPos X="62" Y="1057"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit61>
       <Unit62>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2142"/>
         <CursorPos X="3" Y="2159"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit62>
       <Unit63>
         <Filename Value="C:\lazarus\lcl\include\canvas.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="92" Y="1666"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit63>
       <Unit64>
         <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
         <UnitName Value="fpspreadsheet"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="598"/>
         <CursorPos X="15" Y="621"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="18"/>
         <Loaded Value="True"/>
       </Unit64>
       <Unit65>
         <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\streams.inc"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="192"/>
         <CursorPos X="35" Y="196"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit65>
     </Units>
@@ -581,124 +585,124 @@
     </General>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="817" Column="14" TopLine="794"/>
+        <Filename Value="HotLine.lpr"/>
+        <Caret Line="21" Column="35" TopLine="1"/>
       </Position1>
       <Position2>
         <Filename Value="timetable.pas"/>
-        <Caret Line="823" Column="42" TopLine="789"/>
+        <Caret Line="841" Column="59" TopLine="811"/>
       </Position2>
       <Position3>
         <Filename Value="timetable.pas"/>
-        <Caret Line="834" Column="49" TopLine="797"/>
+        <Caret Line="836" Column="40" TopLine="811"/>
       </Position3>
       <Position4>
         <Filename Value="timetable.pas"/>
-        <Caret Line="835" Column="44" TopLine="809"/>
+        <Caret Line="846" Column="25" TopLine="811"/>
       </Position4>
       <Position5>
         <Filename Value="timetable.pas"/>
-        <Caret Line="843" Column="43" TopLine="806"/>
+        <Caret Line="845" Column="33" TopLine="811"/>
       </Position5>
       <Position6>
         <Filename Value="timetable.pas"/>
-        <Caret Line="817" Column="13" TopLine="811"/>
+        <Caret Line="845" Column="21" TopLine="807"/>
       </Position6>
       <Position7>
         <Filename Value="timetable.pas"/>
-        <Caret Line="846" Column="24" TopLine="811"/>
+        <Caret Line="828" Column="19" TopLine="814"/>
       </Position7>
       <Position8>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="846" Column="24" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="690" Column="57" TopLine="665"/>
       </Position8>
       <Position9>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="845" Column="25" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="691" Column="50" TopLine="666"/>
       </Position9>
       <Position10>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="845" Column="23" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="4015" Column="3" TopLine="3999"/>
       </Position10>
       <Position11>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="845" Column="22" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="4032" Column="29" TopLine="4016"/>
       </Position11>
       <Position12>
-        <Filename Value="HotLine.lpr"/>
-        <Caret Line="21" Column="35" TopLine="1"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="849" Column="24" TopLine="819"/>
       </Position12>
       <Position13>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="841" Column="59" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="6903" Column="3" TopLine="6887"/>
       </Position13>
       <Position14>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="836" Column="40" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="6880" Column="3" TopLine="6860"/>
       </Position14>
       <Position15>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="846" Column="25" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="8844" Column="3" TopLine="8820"/>
       </Position15>
       <Position16>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="845" Column="33" TopLine="811"/>
+        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
+        <Caret Line="8870" Column="3" TopLine="8854"/>
       </Position16>
       <Position17>
-        <Filename Value="timetable.pas"/>
-        <Caret Line="845" Column="21" TopLine="807"/>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\stringl.inc"/>
+        <Caret Line="911" Column="3" TopLine="905"/>
       </Position17>
       <Position18>
         <Filename Value="timetable.pas"/>
-        <Caret Line="828" Column="19" TopLine="814"/>
+        <Caret Line="840" Column="94" TopLine="813"/>
       </Position18>
       <Position19>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="690" Column="57" TopLine="665"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="864" Column="3" TopLine="819"/>
       </Position19>
       <Position20>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="691" Column="50" TopLine="666"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="818" Column="80" TopLine="794"/>
       </Position20>
       <Position21>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="4015" Column="3" TopLine="3999"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="812" Column="64" TopLine="788"/>
       </Position21>
       <Position22>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="4032" Column="29" TopLine="4016"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="822" Column="25" TopLine="795"/>
       </Position22>
       <Position23>
         <Filename Value="timetable.pas"/>
-        <Caret Line="849" Column="24" TopLine="819"/>
+        <Caret Line="820" Column="33" TopLine="790"/>
       </Position23>
       <Position24>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="6903" Column="3" TopLine="6887"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="826" Column="12" TopLine="804"/>
       </Position24>
       <Position25>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="6880" Column="3" TopLine="6860"/>
+        <Filename Value="HotLine.lpr"/>
+        <Caret Line="12" Column="35" TopLine="1"/>
       </Position25>
       <Position26>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="8844" Column="3" TopLine="8820"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="840" Column="25" TopLine="798"/>
       </Position26>
       <Position27>
-        <Filename Value="D:\Desktop\fpspreadsheet-1.4.3\fpspreadsheet.pas"/>
-        <Caret Line="8870" Column="3" TopLine="8854"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="61" Column="5" TopLine="35"/>
       </Position27>
       <Position28>
-        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\stringl.inc"/>
-        <Caret Line="911" Column="3" TopLine="905"/>
+        <Filename Value="timetable.pas"/>
+        <Caret Line="846" Column="1" TopLine="812"/>
       </Position28>
       <Position29>
         <Filename Value="timetable.pas"/>
-        <Caret Line="840" Column="94" TopLine="813"/>
+        <Caret Line="840" Column="17" TopLine="815"/>
       </Position29>
       <Position30>
         <Filename Value="timetable.pas"/>
-        <Caret Line="864" Column="3" TopLine="819"/>
+        <Caret Line="850" Column="83" TopLine="813"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

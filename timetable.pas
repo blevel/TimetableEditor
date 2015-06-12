@@ -791,7 +791,7 @@ begin
       end else
       begin
         Result +=
-            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
+            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">';
       end;
       for k := 0  to high(Cells[j][i].FRecords) do
       begin
@@ -807,8 +807,58 @@ begin
             '      </TR>'#10;
   end;
   Result += '    </TABLE>'#10
+           +'    <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="1">'#10
+           +'      <TR>'#10
+           +'        <TH BGCOLOR="Gainsboro">Поля</TH>'#10
+           +'      </TR>'#10
+           +'      <TR>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">';
+  for i := 0 to  FieldsBox.Count - 1 do
+  begin
+    if FieldsBox.Checked[i] then
+    begin
+      Result +=
+                     FieldsBox.Items[i] + '<br>';
+    end;
+  end;
+  Result +=
+                     '</TD>'#10
+           +'      </TR>'#10
+           +'    </TABLE>'#10
+           +'    <TABLE СELLSPACING="0" CELLPADDING="0" BORDER="1">'#10
+           +'      <TR>'#10
+           +'        <TH BGCOLOR="Gainsboro">№</TH>'
+           +'        <TH BGCOLOR="Gainsboro">Логическое выражение</TH>'#10
+           +'        <TH BGCOLOR="Gainsboro">Фильтр по</TH>'#10
+           +'        <TH BGCOLOR="Gainsboro">Оператор выбора</TH>'#10
+           +'        <TH BGCOLOR="Gainsboro">Значение</TH>'
+           +'      </TR>'#10
+           +'      <TR>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">0</TD>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">Нет</TD>'
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.BaseParentFrameOnLv.FieldNameBox.Caption + '</TD>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.BaseParentFrameOnLv.OperationBox.Caption+ '</TD>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.BaseParentFrameOnLv.STRValue.Text +'</TD>'#10
+           +'      </TR>';
+  for i := 0 to ChildFirstFrame1.GetHighFilter do
+  begin
+    Result +=
+            '      <TR>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + IntToStr(i + 1) + '</TD>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.Filter[i].AndOrBox.Caption + '</TD>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.Filter[i].BaseParentFrameOnLV.FieldNameBox.Caption + '</TD>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.Filter[i].BaseParentFrameOnLV.OperationBox.Caption + '</TD>'#10
+           +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.Filter[i].BaseParentFrameOnLV.STRValue.Text + '</TD>'
+           +'      </TR>';
+  end;
+  Result +=
+           // '      </TR>'#10
+            '    </TABLE>'#10
            +'  </BODY>'#10
            +'</HTML>'#10;
+
+
+
   ChangeFileExt(FileName, 'html');
   SaveList.Append(Result);
   SaveList.SaveToFile(FileName);
