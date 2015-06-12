@@ -770,16 +770,60 @@ begin
   end;
   Result += '      </TR>'#10;
 
+  {for i := 1 to high(Columns) do
+  begin
+    Result +=
+            '      <TR>'#10
+           +'        <TH BGCOLOR = "Gainsboro">' + Columns[i] + '</TH>'#10;
+    for j := 1 to high(Cells[i]) do
+    begin
+      Result +=
+            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
+      for k := 0 to high(Cells[i][j].FRecords) do
+      begin
+        for l := 0 to Cells[j][i].FRecords[k].FData.Count - 1 do
+        begin
+          Result +=
+                     Cells[j][i].FRecords[k].FData.Strings[l] + '<br>';
+        end;
+      end;
+      Result +=      '</TD>'#10;
+    end;
+    Result +=
+            '      </TR>'#10;
+  end;}
+ { for aCol := 1 to high(Cells) do
+  begin
+    Result +=
+            '      <TR>'#10
+           +'        <TH BGCOLOR = "Gainsboro">' + Strings[aCol] + '</TH>'#10;
+    for aRow := 1 to high(Cells[aCol]) do
+    begin
+      Result +=
+            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
+      for i := 0 to high(Cells[aCol][aRow].FRecords) do
+      begin
+        for j := 0 to Cells[aCol][aRow].FRecords[i].FData.Count - 1 do
+        begin
+          Result +=
+                     Cells[aCol][aRow].FRecords[i].FData.Strings[j] + '<br>';
+        end;
+      end;
+      Result +=      '</TD>'#10;
+    end;
+    Result +=
+            '      </TR>'#10;
+  end; }
   for i := 1 to high(Strings) do
   begin
     Result +=
             '      <TR>'#10
            +'        <TH BGCOLOR = "Gainsboro">' + Strings[i] + '</TH>'#10;
-    for j := 1 to high(Cells[i]) do
+    for j := 1 to high(Columns) do
     begin
       Result +=
             '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
-      for k := 0 to high(Cells[j][i].FRecords) do
+      for k := 0  to high(Cells[j][i].FRecords) do
       begin
         for l := 0 to Cells[j][i].FRecords[k].FData.Count - 1 do
         begin
@@ -792,28 +836,6 @@ begin
     Result +=
             '      </TR>'#10;
   end;
-  {for aRow := 1 to high(Cells) do
-  begin
-    Result +=
-            '      <TR>'#10
-           +'        <TH BGCOLOR = "Gainsboro">' + Strings[aRow] + '</TH>'#10;
-    for aCol := 1 to high(Cells[aRow]) do
-    begin
-      Result +=
-            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
-      for i := 0 to high(Cells[aRow][aCol].FRecords) do
-      begin
-        for j := 0 to Cells[aRow][aCol].FRecords[i].Fdata.Count - 1 do
-        begin
-          Result +=
-                     Cells[aRow][aCol].FRecords[i].FData.Strings[j] + '<br>';
-        end;
-      end;
-      Result +=      '</TD>'#10;
-    end;
-    Result +=
-            '      </TR>'#10;
-  end;                           }
   Result += '    </TABLE>'#10
            +'  </BODY>'#10
            +'</HTML>'#10;
