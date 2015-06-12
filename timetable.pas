@@ -39,7 +39,6 @@ type
     FFilled: boolean;
     procedure AddRecord;
     procedure AddButton(AButton: TMyButton);
-    destructor Destroy; override;
   end;
 
   TMyStringList = class(TStringList)
@@ -50,10 +49,10 @@ type
   { TTimeTableForm }
 
   TTimeTableForm = class(TForm)
-    DrawGrid1: TDrawGrid;
-    MainMenu1: TMainMenu;
-    MenuItem1: TMenuItem;
-    SaveDialog1: TSaveDialog;
+    DrawGrid: TDrawGrid;
+    MainMenu: TMainMenu;
+    ExportsItem: TMenuItem;
+    SaveDialogTT: TSaveDialog;
     SortOrderBox: TComboBox;
     ExecuteBut: TButton;
     FieldsBox: TCheckListBox;
@@ -62,50 +61,42 @@ type
     RowsBox: TComboBox;
     ColumnsBox: TComboBox;
     SortBox: TComboBox;
-    DataSource1: TDataSource;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
+    DataSourceTT: TDataSource;
+    LabelCol: TLabel;
+    LabelRow: TLabel;
+    LabelSelection: TLabel;
+    LabelSort: TLabel;
+    LabelFilters: TLabel;
     Lable1: TLabel;
     Lable2: TLabel;
-    PairSplitter1: TPairSplitter;
+    PairSplitter: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
     PairSplitterSide2: TPairSplitterSide;
     ScrollBox1: TScrollBox;
-    SQLQuery1: TSQLQuery;
+    SQLQueryTT: TSQLQuery;
     procedure ExecuteButClick(Sender: TObject);
     procedure FieldsBoxItemClick(Sender: TObject; Index: integer);
-    procedure MenuItem1Click(Sender: TObject);
-    procedure ParametersBoxItemClick(Sender: TObject; Index: integer);
-    procedure DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
-    procedure DrawGrid1DragOver(Sender, Source: TObject; X, Y: integer;
-      State: TDragState; var Accept: boolean);
-    procedure DrawGrid1DrawCell(Sender: TObject; aCol, aRow: integer;
+    procedure ExportsItemClick(Sender: TObject);
+    procedure DrawGridDrawCell(Sender: TObject; aCol, aRow: integer;
       aRect: TRect; aState: TGridDrawState);
-    procedure DrawGrid1MouseMove(Sender: TObject; Shift: TShiftState;
+    procedure DrawGridMouseMove(Sender: TObject; Shift: TShiftState;
       X, Y: integer);
-    procedure DrawGrid1MouseUp(Sender: TObject; Button: TMouseButton;
+    procedure DrawGridMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: integer);
     procedure FormCreate(Sender: TObject);
-    procedure PairSplitter1ChangeBounds(Sender: TObject);
+    procedure PairSplitterChangeBounds(Sender: TObject);
     procedure FillArr(ASQLQuery: TSQLQuery; ACBox: TComboBox;
       var AArr: TArrStr; var AarrDB: TArrStr);
     procedure CheckRowsForEmty;
     function SaveHTMl(FileName: string):string;
     function SaveXLS(FileName: string): string;
-    //constructor Create(TheOwner: TObject);
   private
-    { private declarations }
   public
-    { public declarations }
     Columns: array of string;
     Strings: array of string;
     DBColumns: array of string;
     DBStrings: array of string;
     Cells: array of array of TCell;
-    //MyButtons: array of array of TButtonAdd;
     Draw: boolean;
     AdditionalFields: array of string;
     LastTopForButtons: integer;
@@ -149,15 +140,6 @@ begin
   FButtons[high(FButtons)] := AButton;
 end;
 
-destructor TCell.Destroy;
-begin
-  //for i := 0 to high(FRecords) do
-  //begin
-
-  //end;
-  inherited Destroy;
-end;
-
 { TTimeTableForm }
 
 procedure TTimeTableForm.ExecuteButClick(Sender: TObject);
@@ -167,29 +149,12 @@ var
   LocalFlag: boolean = True;
   STRCOL, STRROW: string;
 begin
-  //Нужно для совпадения номеров клеток
-  //for i := 0 to high(Cells) do
-  //begin
-  //  for j := 0 to high(Cells[i]) do
-  //  begin
-  //    //Cells[i][j].Free;
-  //    //Freemem(Cells[i][j]);
-  //    if Cells[i][j] <> Nil then
-  //    begin
-  //      Cells[i][j].Destroy;
-  //    end;
-  //  end;
-  //end;
   SetLength(Cells, 0);
-  //for i := 0 to high(Strings) do
-  //begin
-  //  Strings[i]
-  //end;
   SetLength(Strings, 1);
   SetLength(Columns, 1);
 
-  FillArr(SQLQuery1, ColumnsBox, Columns, DBColumns);
-  FillArr(SQLQuery1, RowsBox, Strings, DBStrings);
+  FillArr(SQLQueryTT, ColumnsBox, Columns, DBColumns);
+  FillArr(SQLQueryTT, RowsBox, Strings, DBStrings);
 
   with DataTables.FTables[SchTabInd] do
   begin
@@ -203,21 +168,8 @@ begin
       TabFields[SortBox.ItemIndex].FieldTabNForJoin + '.' +
       TabFields[SortBox.ItemIndex].FieldDBName;
   end;
-
-
-  //ShowMessage(SQLbuf);
-  //if SortBox.ItemIndex = 0 then
-  //begin
-  //  SQLbuf += ' DESC ';
-  //end;
-  //if SortBox.ItemIndex = 1 then
-  //begin
-  //  SQLbuf += ' ASC ';
-  //end;
-
-  SQLQuery1.SQL.Text := SQLbuf;
-  //Edit1.Text := SQLQuery1.SQL.Text;
-  SQLQuery1.Open;
+  SQLQueryTT.SQL.Text := SQLbuf;
+  SQLQueryTT.Open;
   Setlength(Cells, length(Columns) + 1);
   for i := 1 to high(Cells) do
   begin
@@ -236,26 +188,22 @@ begin
 
   STRCOl := DataTables.FTables[SchTabInd].TabFields[ColumnsBox.ItemIndex].FieldFNForSel;
   STRROW := DataTables.FTables[SchTabInd].TabFields[RowsBox.ItemIndex].FieldFNForSel;
-  while not SQLQuery1.EOF do
+  while not SQLQueryTT.EOF do
   begin
     for i := 1 to high(Columns) do
     begin
       for j := 1 to high(Strings) do
       begin
-        if (SQLQuery1.FieldByName(STRCOL).AsString = Columns[i]) and
-          (SQLQuery1.FieldByName(STRROW).AsString = Strings[j]) then
+        if (SQLQueryTT.FieldByName(STRCOL).AsString = Columns[i]) and
+          (SQLQueryTT.FieldByName(STRROW).AsString = Strings[j]) then
         begin
           Cells[i][j].FCount += 1;
         end;
       end;
     end;
-    SQLQuery1.Next;
+    SQLQueryTT.Next;
   end;
-  //SQLbuf := SQLQuery1.SQL.Text;
-  //SQLQuery1.Close;
-  //SQLQuery1.SQL.Text := SQLbuf;
-  //SQLQuery1.Open;
-  SQLQuery1.First;
+  SQLQueryTT.First;
 
   for i := 1 to high(Cells) do
   begin
@@ -282,7 +230,7 @@ begin
           begin
             Continue;
           end;
-          buf := SQLQuery1.FieldByName(
+          buf := SQLQueryTT.FieldByName(
             DataTables.FTables[8].TabFields[l].FieldFNForSel).AsString;
           with Cells[i][j] do
           begin
@@ -298,8 +246,8 @@ begin
           end;
         end;
         Cells[i][j].FRecords[high(Cells[i][j].FRecords)].FID :=
-          SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;
-        SQLQuery1.Next;
+          SQLQueryTT.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger;
+        SQLQueryTT.Next;
       end;
       for c := 0 to Cells[i][j].FCount - 1 do
       begin
@@ -314,7 +262,7 @@ begin
         AddButton(TButtonChHeight.Create);
         AddButton(TButtonAdd.Create);
         AddButton(TButttonShowOnLV.Create);
-        FSQL := SQLQuery1.SQL.Text;
+        FSQL := SQLQueryTT.SQL.Text;
       end;
 
     end;
@@ -331,12 +279,12 @@ begin
       end;
     end;
   end;
-  SQLQuery1.Close;
+  SQLQueryTT.Close;
 
 
-  DrawGrid1.RowCount := length(Strings);
-  DrawGrid1.ColCount := length(Columns);
-  with DrawGrid1 do
+  DrawGrid.RowCount := length(Strings);
+  DrawGrid.ColCount := length(Columns);
+  with DrawGrid do
   begin
     DefaultRowHeight := 150;
     DefaultColWidth := 150;
@@ -350,7 +298,7 @@ begin
     begin
       ColWidths[i] := 160;
     end;
-    DrawGrid1.Repaint;
+    DrawGrid.Repaint;
   end;
   CheckRowsForEmty;
   Draw := True;
@@ -375,118 +323,22 @@ begin
   ExecuteBut.Click;
 end;
 
-procedure TTimeTableForm.MenuItem1Click(Sender: TObject);
+procedure TTimeTableForm.ExportsItemClick(Sender: TObject);
 begin
-  if SaveDialog1.Execute then
+  if SaveDialogTT.Execute then
   begin
-    if SaveDialog1.FilterIndex = 1 then
+    if SaveDialogTT.FilterIndex = 1 then
     begin
-      SaveHTMl(Utf8ToAnsi(SaveDialog1.FileName));
+      SaveHTMl(Utf8ToAnsi(SaveDialogTT.FileName));
     end;
-    if SaveDialog1.FilterIndex = 2 then
+    if SaveDialogTT.FilterIndex = 2 then
     begin
-      SaveXLS(Utf8ToAnsi(SaveDialog1.FileName));
+      SaveXLS(Utf8ToAnsi(SaveDialogTT.FileName));
     end;
   end;
 end;
 
-procedure TTimeTableForm.ParametersBoxItemClick(Sender: TObject; Index: integer);
-begin
-  // ExecuteBut.Click;
-end;
-
-procedure TTimeTableForm.DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
-var
-  i: integer;
-  Str: string;
-  aCol, aRow: integer;
-begin
-  //if not FlagForDrag then
-  //begin
-  //  exit;
-  //end;
-  Str := '';
-  DrawGrid1.MouseToCell(X, Y, aCol, aRow);
-  //aCol := aCol -1; aRow := aRow - 1;
-  if (aCol <= 0) or (aRow <= 0) then
-  begin
-    FlagForDrag := False;
-    exit;
-  end;
-  if RowsBox.ItemIndex = ColumnsBox.ItemIndex then
-  begin
-    FlagForDrag := False;
-    exit;
-  end;
-  with CellForDrag do
-  begin
-    for i := 0 to high(FRecords) do
-    begin
-      try
-        Str := '';
-        SQLQuery1.Close;
-        Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
-          'Schedules' + '.' + TStringList(RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] + ' = ' + DBStrings[aRow - 1] + ', Schedules' + '.' +
-          TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[2] +
-          ' = ' + DBColumns[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
-          IntToStr(FRecords[i].FID);
-        SQLQuery1.SQL.Text := Str;
-        SQLQuery1.ExecSQL;
-        DBConnectionMod.SQLTransaction.Commit;
-      except
-        on E: EDatabaseError do
-        begin
-          //ShowMessage(E.ToString);
-          SQLQuery1.Close;
-          Str := '';
-          Str += 'UPDATE ' + DataTables.FTables[8].TabDBName + ' SET ' +
-            'Schedules' + '.' + TStringList(
-            RowsBox.Items.Objects[RowsBox.ItemIndex]).Strings[2] +
-            ' = ' + DBColumns[aRow - 1] + ', Schedules' + '.' +
-            TStringList(ColumnsBox.Items.Objects[ColumnsBox.ItemIndex]).Strings[2] +
-            ' = ' + DBStrings[aCol - 1] + ' WHERE Schedules.RECORDID = ' +
-            IntToStr(FRecords[i].FID);
-          SQLQuery1.SQL.Text := Str;
-          SQLQuery1.ExecSQL;
-          DBConnectionMod.SQLTransaction.Commit;
-        end;
-      end;
-      //ShowMessage(SQLQuery1.SQL.Text);
-    end;
-    ExecuteBut.Click;
-    FlagForDrag := False;
-  end;
-end;
-
-procedure TTimeTableForm.DrawGrid1DragOver(Sender, Source: TObject;
-  X, Y: integer; State: TDragState; var Accept: boolean);
-var
-  aCol, aRow: integer;
-begin
-  DrawGrid1.MouseToCell(X, Y, aCol, aRow);
-  if (aCol = 0) or (aRow = 0) then
-  begin
-    FlagForDrag := False;
-    exit;
-  end;
-  //if RowsBox.ItemIndex = ColumnsBox.ItemIndex then
-  //begin
-  //  FlagForDrag:=False;
-  //  exit;
-  //end;
-  if length(Cells[aCol][aRow].FRecords) = 0 then
-  begin
-    //CellForDrag := TCell.Create;
-    //CellForDrag := Cells[aCol][aRow];
-    FlagForDrag := False;
-    exit;
-  end;
-  CellForDrag := TCell.Create;
-  CellForDrag := Cells[aCol][aRow];
-  FlagForDrag := True;
-end;
-
-procedure TTimeTableForm.DrawGrid1DrawCell(Sender: TObject;
+procedure TTimeTableForm.DrawGridDrawCell(Sender: TObject;
   aCol, aRow: integer; aRect: TRect; aState: TGridDrawState);
 var
   i, j, k: integer;
@@ -495,11 +347,11 @@ begin
   begin
     if (acol = 0) and (aRow > 0) and (aRow <= high(Strings)) then
     begin
-      DrawGrid1.Canvas.TextOut(ARect.Left + 1, ARect.Top + 1, Strings[aRow]);
+      DrawGrid.Canvas.TextOut(ARect.Left + 1, ARect.Top + 1, Strings[aRow]);
     end;
     if (aRow = 0) and (aCol > 0) and (aCol <= high(Columns)) then
     begin
-      DrawGrid1.Canvas.TextOut(Arect.Left + 1, Arect.Top + 1, Columns[aCol]);
+      DrawGrid.Canvas.TextOut(Arect.Left + 1, Arect.Top + 1, Columns[aCol]);
     end;
     if (aCol > 0) and (aRow > 0)
     {and (aCol <= high(Cells)) and (aRow <= high(Cells[aRow]))} then
@@ -513,7 +365,7 @@ begin
         end;
       end;
       LastTopForButtons += 20;
-      with DrawGrid1.Canvas do
+      with DrawGrid.Canvas do
       begin
         for i := 0 to high(Cells[aCol][aRow].FRecords) do
         begin
@@ -554,7 +406,7 @@ begin
   end;
 end;
 
-procedure TTimeTableForm.DrawGrid1MouseMove(Sender: TObject;
+procedure TTimeTableForm.DrawGridMouseMove(Sender: TObject;
   Shift: TShiftState; X, Y: integer);
 var
   aCol, aRow, i, j: integer;
@@ -562,10 +414,10 @@ var
 begin
   if Draw then
   begin
-    DrawGrid1.MouseToCell(X, Y, aCol, aRow);
+    DrawGrid.MouseToCell(X, Y, aCol, aRow);
     if (aCol = 0) or (aRow = 0) then
     begin
-      DrawGrid1.Hint := '';
+      DrawGrid.Hint := '';
       exit;
     end;
     Str := '';
@@ -583,19 +435,19 @@ begin
           Str += #10#13;
         end;
       end;
-      DrawGrid1.Hint := Str;
+      DrawGrid.Hint := Str;
     end;
   end;
 end;
 
-procedure TTimeTableForm.DrawGrid1MouseUp(Sender: TObject; Button: TMouseButton;
+procedure TTimeTableForm.DrawGridMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: integer);
 var
   i, j: integer;
   APoint: TPoint;
   aRow, aCol: integer;
 begin
-  DrawGrid1.MouseToCell(X, Y, aCol, aRow);
+  DrawGrid.MouseToCell(X, Y, aCol, aRow);
   if (aCol = 0) or (aRow = 0) then
   begin
     exit;
@@ -608,8 +460,8 @@ begin
     begin
       if PtInRect(FButtons[i].FRect, APoint) then
       begin
-        FButtons[i].OnClick(Self, DrawGrid1, aRow, Cells[aCol][aRow].FHeight,
-          SQLQuery1, DataTables.FTables[8], 0, Columns[aCol],
+        FButtons[i].OnClick(Self, DrawGrid, aRow, Cells[aCol][aRow].FHeight,
+          SQLQueryTT, DataTables.FTables[8], 0, Columns[aCol],
           Strings[aRow], ColumnsBox.ItemIndex, RowsBox.ItemIndex, ChildFirstFrame1);
       end;
     end;
@@ -619,20 +471,20 @@ begin
       begin
         if PtInRect(Frecords[i].FButtons[j].FRect, APoint) then
         begin
-          SQLQuery1.Close;
-          SQLQuery1.SQL.Text := Cells[aCol][aRow].FSQL;
-          SQLQuery1.Open;
-          while SQLQuery1.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger <>
+          SQLQueryTT.Close;
+          SQLQueryTT.SQL.Text := Cells[aCol][aRow].FSQL;
+          SQLQueryTT.Open;
+          while SQLQueryTT.FieldByName(DataTables.FTables[8].TabUniqueF).AsInteger <>
             FRecords[i].FID do
           begin
-            SQLQuery1.Next;
+            SQLQueryTT.Next;
           end;
-          FRecords[i].FButtons[j].OnClick(Self, DrawGrid1, aRow,
+          FRecords[i].FButtons[j].OnClick(Self, DrawGrid, aRow,
             Cells[aCol][aRow].FHeight,
-            SQLQuery1, DataTables.FTables[8], FRecords[i].FID,
+            SQLQueryTT, DataTables.FTables[8], FRecords[i].FID,
             Columns[aCol], Strings[aRow], ColumnsBox.ItemIndex,
             RowsBox.ItemIndex, ChildFirstFrame1);
-          SQLQuery1.Close;
+          SQLQueryTT.Close;
           exit;
         end;
       end;
@@ -667,17 +519,14 @@ begin
     Top := 56;
     ExecuteBFrLV := TBitBtn.Create(Self);
   end;
-  //ChildFirstFrame1.Parent.Tag := 8;
   RowsBox.ItemIndex := 0;
   ColumnsBox.ItemIndex := 0;
   SortBox.ItemIndex := 0;
-  //SortOrderBox.ItemIndex := 0;
-  //ExecuteBut.Click;
 end;
 
 
 
-procedure TTimeTableForm.PairSplitter1ChangeBounds(Sender: TObject);
+procedure TTimeTableForm.PairSplitterChangeBounds(Sender: TObject);
 begin
 
 end;
@@ -687,14 +536,10 @@ procedure TTimeTableForm.FillArr(ASQLQuery: TSQLQuery; ACBox: TComboBox;
 begin
   ASQLQuery.Close;
   ASQLQuery.SQl.Text := 'SELECT ' + ' * ' +
-    //TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[1] +
-    //'.' + TStringList(ACBox.Items.Objects[ACBox.ItemIndex]).Strings[0] +
     ' FROM ' + DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldTabNForJoin
     + ' ORDER BY ' + DataTables.FTables[SchTabInd].TabFields[
     ACBox.ItemIndex].FieldTabNForJoin + '.' +
     DataTables.FTables[SchTabInd].TabFields[ACBox.ItemIndex].FieldFNForJoin;
-  //ShowMessage(ASQLQuery.SQl.Text);
-  //Edit1.Text := ASQLQuery.SQl.Text;
   ASQLQuery.Open;
   while not ASQLQuery.EOF do
   begin
@@ -717,22 +562,6 @@ var
 begin
   if ParametersBox.Checked[1] then
   begin
-    //for i := 1 to high(Cells) do
-    //begin
-    //  Count := 0;
-    //  for j := 1 to high(Cells[i]) do
-    //  begin
-    //    if Cells[i][j].FHeight <= 10 then
-    //    begin
-    //      Count += 1;
-    //    end;
-    //    ShowMessage(IntToStr(Count) + ' ' + IntToStr(length(Cells[i]) - 1));
-    //    if Count = length(Cells[i]) - 1 then
-    //    begin
-    //      //ShowMessage(IntToStr(Count) + ' ' + IntToStr(length(Cells[i])));
-    //    end;
-    //  end;
-    //end;
     for i := 1 to high(Cells) do
     begin
       Count := 0;
@@ -852,7 +681,6 @@ begin
            +'      </TR>'#10;
   end;
   Result +=
-           // '      </TR>'#10
             '    </TABLE>'#10
            +'  </BODY>'#10
            +'</HTML>'#10;
@@ -882,10 +710,6 @@ begin
   for i := 1 to high(Columns) do
   begin
     TimeTable.WriteUTF8Text(0, i, Columns[i]);
-  end;
-  for i := 1 to high(Strings) do
-  begin
-    //TimeTable.WriteUTF8Text(i, 0, Strings[i]);
   end;
   BigCount := 0;
   LittleCount := 0;
@@ -917,11 +741,6 @@ begin
         TimeTable.WriteVertAlignment(i + BigCount + LittleCount, j, vaCenter);
       end;
       TimeTable.WriteBorders(i + LittleCount + BigCount, j, [cbNorth]);
-      //WriteBorder, options :=
-      //BufStr += #10;
-      //BufStr += ' ';
-      //TimeTable.WriteUTF8Text(i, j, BufStr);
-      //TimeTable.WriteWordwrap(i, j, true);
       TimeTable.WriteColWidth(j, 25);
       if LittleCount > MaxCount then
       begin
@@ -930,10 +749,8 @@ begin
     end;
     TimeTable.MergeCells(i + BigCount, 0, i + MaxCount + BigCount, 0);
     TimeTable.WriteUTF8Text(i + BigCount, 0, Strings[i]);
-    TimeTable.WriteVertAlignment(i + BigCount, 0, vaCenter);;
-    //TimeTable.WriteRowHeight(i, 25);
+    TimeTable.WriteVertAlignment(i + BigCount, 0, vaCenter);
   end;
-  //TimeTable.MergeCells(0 , 0, 0 + 5, 0);
   MetaData := MyFile.AddWorksheet('Фильтры и поля');
   i := 0;
   MetaData.WriteUTF8Text(0, i, '№');
@@ -984,87 +801,10 @@ begin
     end;
   end;
   MyFile.WriteToFile(FileName, sfExcel8, true);
+  //TimeTable.Free;
+  //MetaData.Free;
+  //MyFile.Free;
 end;
 
 end.
-
-
-{procedure JDLSK;
-
-begin
-  if SaveDialog.Execute then
-  begin
-    MyFile := TsWorkbook.Create();
-    MyFile.SetDefaultFont('Calibri', 9);
-    MyFile.UsePalette(@PALETTE_BIFF8, Length(PALETTE_BIFF8));
-    MyFile.FormatSettings.CurrencyFormat := 2;
-    MyFile.FormatSettings.NegCurrFormat := 14;
-    MyFile.Options := MyFile.Options + [boCalcBeforeSaving];
-
-    Sheet := MyFile.AddWorksheet('Расписание');
-    Sheet.Options := Sheet.Options + [soHasFrozenPanes];
-    Sheet.LeftPaneWidth := 1;
-    Sheet.TopPaneHeight := 1;
-    //Sheet.Options := Sheet.Options - [soShowGridLines];
-    for i := 1 to HValues.Count do
-      Sheet.WriteColWidth(i, 52);
-    Sheet.WriteColWidth(0, Wspace div 6 + 1);
-
-    SmallIndent := 0;
-    MaxIndent := 0;
-    LargeIndent := 0;
-
-    for i := 0 to HValues.Count - 1 do
-      Sheet.WriteUTF8Text(0, i + 1, HValues[i]);
-
-    for i := 0 to High(Cells) do
-    begin
-      LargeIndent += MaxIndent;
-      MaxIndent := 0;
-      for j := 0 to High(Cells[i]) do
-      begin
-        SmallIndent := 0;
-        Sheet.WriteBorders(i + 1 + LargeIndent, j + 1, [cbEast, cbWest, cbNorth]);
-        for k := 0 to High(Cells[i][j].Data) do
-        begin
-          Temp := '';
-          for t := 0 to Cells[i][j].Data[k].Values.Count - 1 do
-            Temp += Cells[i][j].Data[k].Values[t] + #10;
-
-          Sheet.WriteWordwrap(i + 1 + SmallIndent + LargeIndent, j + 1, True);
-          Sheet.WriteUTF8Text(i + 1 + SmallIndent + LargeIndent, j + 1, Temp);
-          Sheet.WriteBorders(i + 2 + SmallIndent + LargeIndent, j + 1, [cbEast, cbWest]);
-          Inc(SmallIndent);
-        end;
-        Sheet.WriteBorders(i + 1 + SmallIndent + LargeIndent, j + 1,
-          [cbNorth]);
-        if MaxIndent < SmallIndent then
-          MaxIndent := SmallIndent - 1;
-      end;
-      Sheet.MergeCells(i + 1 + LargeIndent, 0, i + 1 + LargeIndent + MaxIndent, 0);
-      Sheet.WriteUTF8Text(i + 1 + LargeIndent, 0, VValues[i]);
-      Sheet.WriteVertAlignment(i + 1 + LargeIndent, 0, vaCenter);
-    end;
-    //for i := 0 to LargeIndent do
-    // Sheet.WriteBorders(i,0,[cbEast,cbNorth,cbSouth,cbWest]);
-    MyFile.WriteToFile(SaveDialog.FileName, sfExcel8, True);
-  end;
-end;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

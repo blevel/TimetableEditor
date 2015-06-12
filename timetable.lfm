@@ -1,22 +1,22 @@
 object TimeTableForm: TTimeTableForm
-  Left = 794
+  Left = 347
   Height = 617
-  Top = 380
+  Top = 222
   Width = 1019
   Caption = 'TimeTableForm'
   ClientHeight = 597
   ClientWidth = 1019
-  Menu = MainMenu1
+  Menu = MainMenu
   OnCreate = FormCreate
   LCLVersion = '1.2.6.0'
-  object PairSplitter1: TPairSplitter
+  object PairSplitter: TPairSplitter
     Cursor = crVSplit
     Left = -1
     Height = 597
     Top = 0
     Width = 1020
     Anchors = [akTop, akLeft, akRight, akBottom]
-    OnChangeBounds = PairSplitter1ChangeBounds
+    OnChangeBounds = PairSplitterChangeBounds
     Position = 440
     SplitterType = pstVertical
     object PairSplitterSide1: TPairSplitterSide
@@ -27,7 +27,7 @@ object TimeTableForm: TTimeTableForm
       Width = 1020
       ClientWidth = 1020
       ClientHeight = 440
-      object DrawGrid1: TDrawGrid
+      object DrawGrid: TDrawGrid
         AnchorSideRight.Control = PairSplitterSide1
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = PairSplitterSide1
@@ -42,11 +42,9 @@ object TimeTableForm: TTimeTableForm
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0
-        OnDragDrop = DrawGrid1DragDrop
-        OnDragOver = DrawGrid1DragOver
-        OnDrawCell = DrawGrid1DrawCell
-        OnMouseMove = DrawGrid1MouseMove
-        OnMouseUp = DrawGrid1MouseUp
+        OnDrawCell = DrawGridDrawCell
+        OnMouseMove = DrawGridMouseMove
+        OnMouseUp = DrawGridMouseUp
       end
     end
     object PairSplitterSide2: TPairSplitterSide
@@ -104,7 +102,7 @@ object TimeTableForm: TTimeTableForm
           OnItemClick = FieldsBoxItemClick
           TabOrder = 3
         end
-        object Label1: TLabel
+        object LabelCol: TLabel
           Left = 24
           Height = 15
           Top = 96
@@ -112,7 +110,7 @@ object TimeTableForm: TTimeTableForm
           Caption = 'Столбцы '
           ParentColor = False
         end
-        object Label2: TLabel
+        object LabelRow: TLabel
           Left = 24
           Height = 15
           Top = 72
@@ -120,7 +118,7 @@ object TimeTableForm: TTimeTableForm
           Caption = 'Строки'
           ParentColor = False
         end
-        object Label3: TLabel
+        object LabelSelection: TLabel
           Left = 24
           Height = 15
           Top = 40
@@ -136,7 +134,7 @@ object TimeTableForm: TTimeTableForm
           ItemHeight = 15
           TabOrder = 4
         end
-        object Label4: TLabel
+        object LabelSort: TLabel
           Left = 200
           Height = 15
           Top = 40
@@ -155,13 +153,12 @@ object TimeTableForm: TTimeTableForm
             'Скрывать пустые строки'
           )
           ItemHeight = 17
-          OnItemClick = ParametersBoxItemClick
           TabOrder = 5
           Data = {
             03000000000000
           }
         end
-        object Label5: TLabel
+        object LabelFilters: TLabel
           Left = 312
           Height = 15
           Top = 40
@@ -185,7 +182,7 @@ object TimeTableForm: TTimeTableForm
       end
     end
   end
-  object SQLQuery1: TSQLQuery
+  object SQLQueryTT: TSQLQuery
     FieldDefs = <>
     Database = DBConnectionMod.IBConnection
     Transaction = DBConnectionMod.SQLTransaction
@@ -193,20 +190,20 @@ object TimeTableForm: TTimeTableForm
     left = 16
     top = 184
   end
-  object DataSource1: TDataSource
-    DataSet = SQLQuery1
+  object DataSourceTT: TDataSource
+    DataSet = SQLQueryTT
     left = 16
     top = 224
   end
-  object MainMenu1: TMainMenu
+  object MainMenu: TMainMenu
     left = 16
     top = 144
-    object MenuItem1: TMenuItem
-      Caption = 'Сохранить'
-      OnClick = MenuItem1Click
+    object ExportsItem: TMenuItem
+      Caption = 'Экспорт'
+      OnClick = ExportsItemClick
     end
   end
-  object SaveDialog1: TSaveDialog
+  object SaveDialogTT: TSaveDialog
     Filter = 'Веб-страница (*.html)|*.html|Электронная таблица(*.xls)|*.xls'
     left = 16
     top = 272
