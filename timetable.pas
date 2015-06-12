@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, sqldb, DB, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Grids, StdCtrls, PairSplitter, CheckLst, DBConnection, Meta, MyBut,
-  ChildFirstFrame, Windows, Buttons, SQLcreating;
+  ChildFirstFrame, Windows, Buttons, Menus, SQLcreating;
 
 type
 
@@ -51,6 +51,9 @@ type
 
   TTimeTableForm = class(TForm)
     DrawGrid1: TDrawGrid;
+    MainMenu1: TMainMenu;
+    MenuItem1: TMenuItem;
+    SaveDialog1: TSaveDialog;
     SortOrderBox: TComboBox;
     ExecuteBut: TButton;
     FieldsBox: TCheckListBox;
@@ -74,6 +77,7 @@ type
     SQLQuery1: TSQLQuery;
     procedure ExecuteButClick(Sender: TObject);
     procedure FieldsBoxItemClick(Sender: TObject; Index: integer);
+    procedure MenuItem1Click(Sender: TObject);
     procedure ParametersBoxItemClick(Sender: TObject; Index: integer);
     procedure DrawGrid1DragDrop(Sender, Source: TObject; X, Y: integer);
     procedure DrawGrid1DragOver(Sender, Source: TObject; X, Y: integer;
@@ -89,6 +93,7 @@ type
     procedure FillArr(ASQLQuery: TSQLQuery; ACBox: TComboBox;
       var AArr: TArrStr; var AarrDB: TArrStr);
     procedure CheckRowsForEmty;
+    function SaveHTMl(FileName: string):string;
     //constructor Create(TheOwner: TObject);
   private
     { private declarations }
@@ -367,6 +372,14 @@ begin
     FieldsBox.Checked[Index] := True;
   end;
   ExecuteBut.Click;
+end;
+
+procedure TTimeTableForm.MenuItem1Click(Sender: TObject);
+begin
+  if SaveDialog1.Execute then
+  begin
+    SaveHTMl(Utf8ToAnsi(SaveDialog1.FileName));
+  end;
 end;
 
 procedure TTimeTableForm.ParametersBoxItemClick(Sender: TObject; Index: integer);
@@ -731,4 +744,105 @@ begin
   end;
 end;
 
+function TTimeTableForm.SaveHTMl(FileName: string): string;
+var
+  i, j, k, l: integer;
+  SaveList: TStringList;
+  aCol, aRow: integer;
+
+begin
+  SaveList := TStringList.Create;
+  Result := '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"'#10
+           +'"http://www.qyos.am/TR/html4/strict.dtd">'#10
+           +'<HTML>'#10
+           +'  <HEAD>'#10
+           +'    <META http-equiv="Content-Type" content="text/html; charset=utf-8">'#10
+           +'    <TITLE>' + Caption + '</TITLE>'#10
+           +'  </HEAD>'#10
+           +'  <BODY>'#10
+           +'    <TABLE CELLSPACING="0" CELLPADDING="0" BORDER="1">'#10
+           +'      <TR>'#10
+           +'      <TH BGCOLOR="Gainsboro"><br></TH>'#10;
+  for i := 1 to high(Columns) do
+  begin
+    Result +=
+            '        <TH BGCOLOR="Gainsboro">' + Columns[i] + '</TH>'#10;
+  end;
+  Result += '      </TR>'#10;
+
+  for i := 1 to high(Strings) do
+  begin
+    Result +=
+            '      <TR>'#10
+           +'        <TH BGCOLOR = "Gainsboro">' + Strings[i] + '</TH>'#10;
+    for j := 1 to high(Cells[i]) do
+    begin
+      Result +=
+            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
+      for k := 0 to high(Cells[j][i].FRecords) do
+      begin
+        for l := 0 to Cells[j][i].FRecords[k].FData.Count - 1 do
+        begin
+          Result +=
+                     Cells[j][i].FRecords[k].FData.Strings[l] + '<br>';
+        end;
+      end;
+      Result +=      '</TD>'#10;
+    end;
+    Result +=
+            '      </TR>'#10;
+  end;
+  {for aRow := 1 to high(Cells) do
+  begin
+    Result +=
+            '      <TR>'#10
+           +'        <TH BGCOLOR = "Gainsboro">' + Strings[aRow] + '</TH>'#10;
+    for aCol := 1 to high(Cells[aRow]) do
+    begin
+      Result +=
+            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
+      for i := 0 to high(Cells[aRow][aCol].FRecords) do
+      begin
+        for j := 0 to Cells[aRow][aCol].FRecords[i].Fdata.Count - 1 do
+        begin
+          Result +=
+                     Cells[aRow][aCol].FRecords[i].FData.Strings[j] + '<br>';
+        end;
+      end;
+      Result +=      '</TD>'#10;
+    end;
+    Result +=
+            '      </TR>'#10;
+  end;                           }
+  Result += '    </TABLE>'#10
+           +'  </BODY>'#10
+           +'</HTML>'#10;
+  ChangeFileExt(FileName, 'html');
+  SaveList.Append(Result);
+  SaveList.SaveToFile(FileName);
+  SaveList.Free;
+end;
+
 end.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
