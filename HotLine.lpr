@@ -7,9 +7,9 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, Main, Meta, ListView, AboutForm, SQLcreating, FilterFrame,
-  ChildFirstFrame, addfilterframe, MyFrame, CardForm, DBConnection, TimeTable,
-  MyBut, ListViewChild;
+  Forms, laz_fpspreadsheet, Main, Meta, ListView, AboutForm, SQLcreating,
+  FilterFrame, ChildFirstFrame, addfilterframe, MyFrame, CardForm, DBConnection,
+  TimeTable, MyBut, ListViewChild;
 
 {$R *.res}
 

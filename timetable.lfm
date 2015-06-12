@@ -1,7 +1,7 @@
 object TimeTableForm: TTimeTableForm
-  Left = 311
+  Left = 827
   Height = 617
-  Top = 239
+  Top = 485
   Width = 1019
   Caption = 'TimeTableForm'
   ClientHeight = 597
@@ -207,7 +207,7 @@ object TimeTableForm: TTimeTableForm
     end
   end
   object SaveDialog1: TSaveDialog
-    Filter = 'Веб-страница (*.html)|*.html'
+    Filter = 'Веб-страница (*.html)|*.html|Электронная таблица(*.xls)|*.xls'
     left = 16
     top = 272
   end

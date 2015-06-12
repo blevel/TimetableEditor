@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, sqldb, DB, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Grids, StdCtrls, PairSplitter, CheckLst, DBConnection, Meta, MyBut,
-  ChildFirstFrame, Windows, Buttons, Menus, SQLcreating;
+  ChildFirstFrame, Windows, Buttons, Menus, SQLcreating, fpspreadsheet;
 
 type
 
@@ -94,6 +94,7 @@ type
       var AArr: TArrStr; var AarrDB: TArrStr);
     procedure CheckRowsForEmty;
     function SaveHTMl(FileName: string):string;
+    function SaveXLS(FileName: string): string;
     //constructor Create(TheOwner: TObject);
   private
     { private declarations }
@@ -378,7 +379,14 @@ procedure TTimeTableForm.MenuItem1Click(Sender: TObject);
 begin
   if SaveDialog1.Execute then
   begin
-    SaveHTMl(Utf8ToAnsi(SaveDialog1.FileName));
+    if SaveDialog1.FilterIndex = 1 then
+    begin
+      SaveHTMl(Utf8ToAnsi(SaveDialog1.FileName));
+    end;
+    if SaveDialog1.FilterIndex = 2 then
+    begin
+      SaveXLS(Utf8ToAnsi(SaveDialog1.FileName));
+    end;
   end;
 end;
 
@@ -738,7 +746,6 @@ begin
       ShowMessage(IntToStr(Count) + ' ' + IntToStr(length(Cells[i])- 1));
       if Count = length(Cells[i]) then
       begin
-
       end;
     end;
   end;
@@ -749,7 +756,6 @@ var
   i, j, k, l: integer;
   SaveList: TStringList;
   aCol, aRow: integer;
-
 begin
   SaveList := TStringList.Create;
   Result := '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN"'#10
@@ -770,50 +776,7 @@ begin
   end;
   Result += '      </TR>'#10;
 
-  {for i := 1 to high(Columns) do
-  begin
-    Result +=
-            '      <TR>'#10
-           +'        <TH BGCOLOR = "Gainsboro">' + Columns[i] + '</TH>'#10;
-    for j := 1 to high(Cells[i]) do
-    begin
-      Result +=
-            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
-      for k := 0 to high(Cells[i][j].FRecords) do
-      begin
-        for l := 0 to Cells[j][i].FRecords[k].FData.Count - 1 do
-        begin
-          Result +=
-                     Cells[j][i].FRecords[k].FData.Strings[l] + '<br>';
-        end;
-      end;
-      Result +=      '</TD>'#10;
-    end;
-    Result +=
-            '      </TR>'#10;
-  end;}
- { for aCol := 1 to high(Cells) do
-  begin
-    Result +=
-            '      <TR>'#10
-           +'        <TH BGCOLOR = "Gainsboro">' + Strings[aCol] + '</TH>'#10;
-    for aRow := 1 to high(Cells[aCol]) do
-    begin
-      Result +=
-            '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
-      for i := 0 to high(Cells[aCol][aRow].FRecords) do
-      begin
-        for j := 0 to Cells[aCol][aRow].FRecords[i].FData.Count - 1 do
-        begin
-          Result +=
-                     Cells[aCol][aRow].FRecords[i].FData.Strings[j] + '<br>';
-        end;
-      end;
-      Result +=      '</TD>'#10;
-    end;
-    Result +=
-            '      </TR>'#10;
-  end; }
+
   for i := 1 to high(Strings) do
   begin
     Result +=
@@ -821,8 +784,15 @@ begin
            +'        <TH BGCOLOR = "Gainsboro">' + Strings[i] + '</TH>'#10;
     for j := 1 to high(Columns) do
     begin
-      Result +=
+      if length(Cells[j][i].FRecords) = 0 then
+      begin
+        Result +=
+            '        <TD NOWRAP VALIGN="TOP">';
+      end else
+      begin
+        Result +=
             '        <TD NOWRAP VALIGN="TOP" BGCOLOR="CornflowerBlue">';
+      end;
       for k := 0  to high(Cells[j][i].FRecords) do
       begin
         for l := 0 to Cells[j][i].FRecords[k].FData.Count - 1 do
@@ -845,14 +815,111 @@ begin
   SaveList.Free;
 end;
 
+function TTimeTableForm.SaveXLS(FileName: string): string;
+var
+  MyFile: TsWorkbook;
+  TimeTable: TsWorksheet;
+  BookName: string = 'Расписание';
+  i, j, k, l, Count: integer;
+  BufStr :string;
+  LittleCount, BigCount, MaxCount: integer;
+begin
+  MyFile := TsWorkbook.Create;
+  TimeTable := MyFile.AddWorksheet(BookName);
+  TimeTable.Options := TimeTable.Options + [soHasFrozenPanes];
+  TimeTable.LeftPaneWidth := 1;
+  TimeTable.TopPaneHeight := 1;
+  for i := 1 to high(Columns) do
+  begin
+    TimeTable.WriteUTF8Text(0, i, Columns[i]);
+  end;
+  for i := 1 to high(Strings) do
+  begin
+    //TimeTable.WriteUTF8Text(i, 0, Strings[i]);
+  end;
+  BigCount := 0;
+  LittleCount := 0;
+  MaxCount := 0;
+  for i := 1 to high(Strings) do
+  begin
+    BigCount +=  MaxCount;
+    MaxCount := 0;
+    for j := 1 to high(Columns) do
+    begin
+      LittleCount := 0;
+      for k := 0 to high(Cells[j][i].FRecords) do
+      begin
+        BufStr := '';
+        for l := 0 to Cells[j][i].Frecords[k].FData.Count - 1 do
+        begin
+          BufStr += Cells[j][i].FRecords[k].FData.Strings[l] + #10;
+        end;
+        BufStr += #10;
+        TimeTable.WriteUTF8Text(i + BigCount + LittleCount, j, BufStr);
+        TimeTable.WriteWordwrap(i + BigCount + LittleCount, j, true);
+        inc(LittleCount);
+        TimeTable.WriteVertAlignment(i + BigCount + LittleCount, j, vaCenter);
+      end;
+      //WriteBorder, options :=
+      //BufStr += #10;
+      //BufStr += ' ';
+      //TimeTable.WriteUTF8Text(i, j, BufStr);
+      //TimeTable.WriteWordwrap(i, j, true);
+      TimeTable.WriteColWidth(j, 25);
+      if LittleCount > MaxCount then
+      begin
+        MaxCount := LittleCount;
+      end;
+    end;
+    TimeTable.MergeCells(i + BigCount, 0, i + MaxCount + BigCount, 0);
+    TimeTable.WriteUTF8Text(i + BigCount, 0, Strings[i]);
+    TimeTable.WriteVertAlignment(i + BigCount, 0, vaCenter);;
+    //TimeTable.WriteRowHeight(i, 25);
+  end;
+  //TimeTable.MergeCells(0 , 0, 0 + 5, 0);
+  MyFile.WriteToFile(FileName, sfExcel8, true);
+end;
+
 end.
 
-
-
-
-
-
-
+{
+procedure sldjfh;
+begin
+  for i := 0 to High(Cells) do
+  begin
+    LargeCount += MaxCount;
+    MaxCount := 0;
+    for j := 0 to High(Cells[i]) do
+    begin
+      SmallCount := 0;
+      Sheet.WriteBorders(i + 1 + SmallCount + LargeCount, j + 1,
+        [cbNorth, cbEast, cbWest]);
+      for k := 0 to High(Cells[i][j].Data) do
+      begin
+        Temp := '';
+        for t := 0 to Cells[i][j].Data[k].Values.Count - 1 do
+        begin
+          //Dif := i + 1 + SmallCount + LargeCount;
+          Temp += Cells[i][j].Data[k].Values[t] + #10;
+        end;
+        //ShowMessage(Temp);
+        Sheet.WriteWordwrap(i + 1 + SmallCount + LargeCount, j + 1, True);
+        Sheet.WriteUTF8Text(i + 1 + SmallCount + LargeCount, j + 1, Temp);
+        Sheet.WriteBorders(i + 1 + SmallCount + LargeCount,
+          j + 1, [cbEast, cbWest]);
+        Inc(SmallCount);
+      end;
+      Sheet.WriteBorders(i + SmallCount + LargeCount, j + 1,
+        Sheet.GetCell(i + SmallCount + LargeCount, j + 1)^.Border[cbWest]);
+      if MaxCount < SmallCount then
+        MaxCount := SmallCount;
+    end;
+    Sheet.MergeCells(i + LargeCount, 0, i + LargeCount + MaxCount, 0);
+    Sheet.WriteUTF8Text(i + LargeCount, 0, VValues[i]);
+    Sheet.WriteVertAlignment(i + LargeCount, 0, vaCenter);
+  end;
+end;
+}
 
 
 
