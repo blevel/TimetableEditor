@@ -849,7 +849,7 @@ begin
            +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.Filter[i].BaseParentFrameOnLV.FieldNameBox.Caption + '</TD>'#10
            +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.Filter[i].BaseParentFrameOnLV.OperationBox.Caption + '</TD>'#10
            +'        <TD NOWRAP VALIGN="TOP" BGCOLOR="Turquoise">' + ChildFirstFrame1.Filter[i].BaseParentFrameOnLV.STRValue.Text + '</TD>'
-           +'      </TR>';
+           +'      </TR>'#10;
   end;
   Result +=
            // '      </TR>'#10
@@ -868,7 +868,7 @@ end;
 function TTimeTableForm.SaveXLS(FileName: string): string;
 var
   MyFile: TsWorkbook;
-  TimeTable: TsWorksheet;
+  TimeTable, MetaData: TsWorksheet;
   BookName: string = 'Расписание';
   i, j, k, l, Count: integer;
   BufStr :string;
@@ -897,6 +897,7 @@ begin
     for j := 1 to high(Columns) do
     begin
       LittleCount := 0;
+      TimeTable.WriteBorders(i + BigCount, j, [cbEast, cbWest, cbNorth]);
       for k := 0 to high(Cells[j][i].FRecords) do
       begin
         BufStr := '';
@@ -905,11 +906,17 @@ begin
           BufStr += Cells[j][i].FRecords[k].FData.Strings[l] + #10;
         end;
         BufStr += #10;
+        if Cells[j][i].Frecords[k].FData.Count > 0 then
+        begin
+          TimeTable.WriteBackgroundColor(i + BigCount + LittleCount, j, scYellow);
+        end;
         TimeTable.WriteUTF8Text(i + BigCount + LittleCount, j, BufStr);
         TimeTable.WriteWordwrap(i + BigCount + LittleCount, j, true);
+        TimeTable.WriteBorders(i + 1 + LittleCount + BigCount, j, [cbEast, cbWest]);
         inc(LittleCount);
         TimeTable.WriteVertAlignment(i + BigCount + LittleCount, j, vaCenter);
       end;
+      TimeTable.WriteBorders(i + LittleCount + BigCount, j, [cbNorth]);
       //WriteBorder, options :=
       //BufStr += #10;
       //BufStr += ' ';
@@ -927,49 +934,125 @@ begin
     //TimeTable.WriteRowHeight(i, 25);
   end;
   //TimeTable.MergeCells(0 , 0, 0 + 5, 0);
+  MetaData := MyFile.AddWorksheet('Фильтры и поля');
+  i := 0;
+  MetaData.WriteUTF8Text(0, i, '№');
+  inc(i);
+  MetaData.WriteUTF8Text(0, i, 'Логическое выражение');
+  inc(i);
+  MetaData.WriteUTF8Text(0, i, 'Фильтр по');
+  inc(i);
+  MetaData.WriteUTF8Text(0, i, 'Оператор выбора');
+  inc(i);
+  MetaData.WriteUTF8Text(0, i, 'Значение');
+  inc(i);
+  for j := 0 to i do
+  begin
+    MetaData.WriteColWidth(j, 25);
+  end;
+  i := 0;
+  MetaData.WriteUTF8Text(1, i, IntToStr(i));
+  inc(i);
+  MetaData.WriteUTF8Text(1, i, 'Нет');
+  inc(i);
+  MetaData.WriteUTF8Text(1, i, ChildFirstFrame1.BaseParentFrameOnLv.FieldNameBox.Caption);
+  inc(i);
+  MetaData.WriteUTF8Text(1, i, ChildFirstFrame1.BaseParentFrameOnLv.OperationBox.Caption);
+  inc(i);
+  MetaData.WriteUTF8Text(1, i, ChildFirstFrame1.BaseParentFrameOnLv.STRValue.Text);
+  for j := 0 to ChildFirstFrame1.GetHighFilter do
+  begin
+    i := 0;
+    MetaData.WriteUTF8Text(j + 2, i, IntToStr(j + 1));
+    inc(i);
+    MetaData.WriteUTF8Text(j + 2, i, ChildFirstFrame1.Filter[j].AndOrBox.Caption);
+    inc(i);
+    MetaData.WriteUTF8Text(j + 2, i, ChildFirstFrame1.Filter[j].BaseParentFrameOnLV.FieldNameBox.Caption);
+    inc(i);
+    MetaData.WriteUTF8Text(j + 2, i, ChildFirstFrame1.Filter[j].BaseParentFrameOnLV.OperationBox.Caption);
+    inc(i);
+    MetaData.WriteUTF8Text(j + 2, i, ChildFirstFrame1.Filter[j].BaseParentFrameOnLV.STRValue.Text);
+  end;
+  MetaData.WriteUTF8Text(j + 4, 0, 'Поля');
+  l := 0;
+  for i := 0 to FieldsBox.Count - 1 do
+  begin
+    if FieldsBox.Checked[i] then
+    begin
+      inc(l);
+      MetaData.WriteUTF8Text(j + 5 + l, 0, FieldsBox.Items[i]);
+    end;
+  end;
   MyFile.WriteToFile(FileName, sfExcel8, true);
 end;
 
 end.
 
-{
-procedure sldjfh;
+
+{procedure JDLSK;
+
 begin
-  for i := 0 to High(Cells) do
+  if SaveDialog.Execute then
   begin
-    LargeCount += MaxCount;
-    MaxCount := 0;
-    for j := 0 to High(Cells[i]) do
+    MyFile := TsWorkbook.Create();
+    MyFile.SetDefaultFont('Calibri', 9);
+    MyFile.UsePalette(@PALETTE_BIFF8, Length(PALETTE_BIFF8));
+    MyFile.FormatSettings.CurrencyFormat := 2;
+    MyFile.FormatSettings.NegCurrFormat := 14;
+    MyFile.Options := MyFile.Options + [boCalcBeforeSaving];
+
+    Sheet := MyFile.AddWorksheet('Расписание');
+    Sheet.Options := Sheet.Options + [soHasFrozenPanes];
+    Sheet.LeftPaneWidth := 1;
+    Sheet.TopPaneHeight := 1;
+    //Sheet.Options := Sheet.Options - [soShowGridLines];
+    for i := 1 to HValues.Count do
+      Sheet.WriteColWidth(i, 52);
+    Sheet.WriteColWidth(0, Wspace div 6 + 1);
+
+    SmallIndent := 0;
+    MaxIndent := 0;
+    LargeIndent := 0;
+
+    for i := 0 to HValues.Count - 1 do
+      Sheet.WriteUTF8Text(0, i + 1, HValues[i]);
+
+    for i := 0 to High(Cells) do
     begin
-      SmallCount := 0;
-      Sheet.WriteBorders(i + 1 + SmallCount + LargeCount, j + 1,
-        [cbNorth, cbEast, cbWest]);
-      for k := 0 to High(Cells[i][j].Data) do
+      LargeIndent += MaxIndent;
+      MaxIndent := 0;
+      for j := 0 to High(Cells[i]) do
       begin
-        Temp := '';
-        for t := 0 to Cells[i][j].Data[k].Values.Count - 1 do
+        SmallIndent := 0;
+        Sheet.WriteBorders(i + 1 + LargeIndent, j + 1, [cbEast, cbWest, cbNorth]);
+        for k := 0 to High(Cells[i][j].Data) do
         begin
-          //Dif := i + 1 + SmallCount + LargeCount;
-          Temp += Cells[i][j].Data[k].Values[t] + #10;
+          Temp := '';
+          for t := 0 to Cells[i][j].Data[k].Values.Count - 1 do
+            Temp += Cells[i][j].Data[k].Values[t] + #10;
+
+          Sheet.WriteWordwrap(i + 1 + SmallIndent + LargeIndent, j + 1, True);
+          Sheet.WriteUTF8Text(i + 1 + SmallIndent + LargeIndent, j + 1, Temp);
+          Sheet.WriteBorders(i + 2 + SmallIndent + LargeIndent, j + 1, [cbEast, cbWest]);
+          Inc(SmallIndent);
         end;
-        //ShowMessage(Temp);
-        Sheet.WriteWordwrap(i + 1 + SmallCount + LargeCount, j + 1, True);
-        Sheet.WriteUTF8Text(i + 1 + SmallCount + LargeCount, j + 1, Temp);
-        Sheet.WriteBorders(i + 1 + SmallCount + LargeCount,
-          j + 1, [cbEast, cbWest]);
-        Inc(SmallCount);
+        Sheet.WriteBorders(i + 1 + SmallIndent + LargeIndent, j + 1,
+          [cbNorth]);
+        if MaxIndent < SmallIndent then
+          MaxIndent := SmallIndent - 1;
       end;
-      Sheet.WriteBorders(i + SmallCount + LargeCount, j + 1,
-        Sheet.GetCell(i + SmallCount + LargeCount, j + 1)^.Border[cbWest]);
-      if MaxCount < SmallCount then
-        MaxCount := SmallCount;
+      Sheet.MergeCells(i + 1 + LargeIndent, 0, i + 1 + LargeIndent + MaxIndent, 0);
+      Sheet.WriteUTF8Text(i + 1 + LargeIndent, 0, VValues[i]);
+      Sheet.WriteVertAlignment(i + 1 + LargeIndent, 0, vaCenter);
     end;
-    Sheet.MergeCells(i + LargeCount, 0, i + LargeCount + MaxCount, 0);
-    Sheet.WriteUTF8Text(i + LargeCount, 0, VValues[i]);
-    Sheet.WriteVertAlignment(i + LargeCount, 0, vaCenter);
+    //for i := 0 to LargeIndent do
+    // Sheet.WriteBorders(i,0,[cbEast,cbNorth,cbSouth,cbWest]);
+    MyFile.WriteToFile(SaveDialog.FileName, sfExcel8, True);
   end;
-end;
-}
+end;}
+
+
+
 
 
 
